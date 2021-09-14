@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=El+Messiri&display=swap');
+
+:root {
+  /* --color-button: #c58b71;
+  --color-font: #b17458;
+  --color-shape1: #8c9e6b;
+  --color-shape2: #f3decf;
+  --color-shape3: #f3cf90;
+  --color-background: #faf5f1;
+  --color-background2: #f5e8d6; */
+
+  font-family: 'Open sans', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  --font-2: 'El Messiri', sans-serif;
+  --main-text-color: #1f1f1f;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--color-background);
+    font-size: 16px;
+  }
+  
+  .hidden {
+    display: none;
+  }
+
+header {
+    height: 200px;
+    background-image: url("./images/hotel-wallpaper-opacity-0_3.png");
+    background-size: inherit;
+    background-blend-mode: color-burn;
+    background-color: #213148;
+}
+
+
+  main {
+      height: 300px;
+      /* background-image: url("./images/image-from-rawpixel-id-2756328-jpeg.jpg"); */
+      background-image: url("./images/image-from-rawpixel-id-2756328-jpeg-opacity-0_3.png");
+      background-size: cover;
+      background-color: #FAF6F1;
+  }
+
+  footer {
+    height: 200px;
+    /* background-image: url("./images/hotel-wallpaper-opacity-0_3.png");
+    background-size: inherit;
+    background-blend-mode: color-burn; */
+    background-color: #213148;
+  }
+
+  header > *, main > *, footer > * {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+
