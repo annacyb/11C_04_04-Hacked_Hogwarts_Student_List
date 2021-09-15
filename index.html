@@ -34,18 +34,226 @@
 
 
     <main>
-        <section id="search_elements">
-
+        <section id="search_elements_wrapper">
+            <div id="search_elements">
+                <input type="text" name="searchName" id="search_name" />
+                <button id="search_button">Search</button>
+            </div>
+            <p id="students_found">Students found: 25</p>
         </section>
         <section id="main">
-            <h1>CHECKING MARGINS</h1>
+            <div id="filters_wrapper">
+
+                <div id="filter_by" class="">
+                    <a class="filter-category-collection">
+                        <div class="filtering_category">
+                            <p>House name</p>
+                        </div>
+                    </a>
+                    <ul class="filter-collection_elements">
+                        <a class="filter-Gryffindor">
+                            <li class="filter-house_name_items li_item-flex">
+                                <div class="circle_inactive"></div>
+                                <p>Gryffindor</p>
+                            </li>
+                        </a>
+
+                        <a class="filter-Slytherin">
+                            <li class="filter-house_name_items li_item-flex">
+                                <div class="circle_active"></div>
+                                <!-- <img src="../images/icon-unselected_filtering_element.svg" alt="Filter icon"> -->
+                                <p>Slytherin</p>
+                            </li>
+                        </a>
+
+                        <a class="filter-Hufflepuff">
+                            <li class="filter-house_name_items li_item-flex">
+                                <div class="circle_inactive"></div>
+                                <!-- <img src="../images/icon-unselected_filtering_element.svg" alt="Filter icon"> -->
+                                <p>Hufflepuff</p>
+                            </li>
+                        </a>
+
+                        <a class="filter-Ravenclaw">
+                            <li class="filter-house_name_items li_item-flex">
+                                <div class="circle_inactive"></div>
+                                <!-- <img src="../images/icon-unselected_filtering_element.svg" alt="Filter icon"> -->
+                                <p>Ravenclaw</p>
+                            </li>
+                        </a>
+                    </ul>
+
+
+                    <a class="filter-category-collection">
+                        <div class="filtering_category">
+                            <p>Status</p>
+                        </div>
+                    </a>
+                    <ul class="filter-collection_elements">
+                        <a class="filter-Active_students">
+                            <li class="filter-house_name_items li_item-flex">
+                                <div class="circle_inactive"></div>
+                                <p>Active students</p>
+                            </li>
+                        </a>
+
+                        <a class="filter-Expelled_students">
+                            <li class="filter-house_name_items li_item-flex">
+                                <div class="circle_inactive"></div>
+                                <!-- <img src="../images/icon-unselected_filtering_element.svg" alt="Filter icon"> -->
+                                <p>Expelled students</p>
+                            </li>
+                        </a>
+                    </ul>
+
+
+                    <a class="filter-category-collection">
+                        <div class="filtering_category">
+                            <p>Responsibility</p>
+                        </div>
+                    </a>
+                    <ul class="filter-collection_elements">
+                        <a class="filter-Prefect">
+                            <li class="filter-house_name_items li_item-flex li_item-active">
+                                <div class="circle_active"></div>
+                                <p>Prefect</p>
+                            </li>
+                        </a>
+
+                        <a class="filter-Inquisitorial_Squad">
+                            <li class="filter-house_name_items li_item-flex li_item-active">
+                                <div class="circle_active"></div>
+                                <p>Inquisitorial Squad</p>
+                            </li>
+                        </a>
+                    </ul>
+
+
+                    <a class="filter-category-collection">
+                        <div class="filtering_category">
+                            <!-- <p>COLLECTION</p><img src="../images/icon-plus.svg"> -->
+                            <p>Blood type</p>
+                        </div>
+                    </a>
+                    <ul class="filter-collection_elements">
+                        <a class="filter-Pure-blood">
+                            <li class="filter-house_name_items li_item-flex">
+                                <div class="circle_inactive"></div>
+                                <!-- <img src="../images/icon-unselected_filtering_element.svg" alt="Filter icon"> -->
+                                <p>Pure-blood</p>
+                            </li>
+                        </a>
+
+                        <a class="filter-Half-blood">
+                            <li class="filter-house_name_items li_item-flex">
+                                <div class="circle_inactive"></div>
+                                <!-- <img src="../images/icon-unselected_filtering_element.svg" alt="Filter icon"> -->
+                                <p>Half-blood</p>
+                            </li>
+                        </a>
+
+                        <a class="filter-Mud-blood">
+                            <li class="filter-house_name_items li_item-flex">
+                                <div class="circle_inactive"></div>
+                                <!-- <img src="../images/icon-unselected_filtering_element.svg" alt="Filter icon"> -->
+                                <p>Mud-blood</p>
+                            </li>
+                        </a>
+                    </ul>
+
+                </div>
+
+            </div>
+            <div id="search_results">
+                <!-- <div id="table_headers">
+                    <div class="table_header">
+                        <p>Name</p>
+                        <img src="./images/icons/sort-icon.png" alt="sort icon">
+                    </div>
+                    <div class="table_header">
+                        <p>Surname</p>
+                        <img src="./images/icons/sort-icon-asc.png" alt="sort icon">
+                    </div>
+                    <div class="table_header">
+                        <p>House Name</p>
+                    </div>
+                    <div class="table_header">
+                        <p>Responsibility</p>
+                    </div>
+                    <div class="table_header">
+                        <p>Status</p>
+                    </div>
+
+                </div> -->
+
+
+                <div id="search_results">
+                    <div id="table_headers">
+                        <div style="display: flex;">
+                            <img style="opacity: 0;" class="student_photo" src="./images/students-images/abbott_h.png"
+                                alt="student's photo">
+                            <p>Name</p>
+                        </div>
+                        <div>
+                            <p>Surname</p>
+                        </div>
+                        <div>
+                            <p>House name</p>
+                        </div>
+                        <div>
+                            <p>Responsibility</p>
+                        </div>
+                        <div>
+                            <p>Status</p>
+                        </div>
+                        <div>
+                            <img src="./images/icons/icon-see_details.png" alt="see details"
+                                style="padding-right: 30px;">
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+                <a href="">
+                    <div id="table_elements">
+                        <div class="table_element">
+                            <div style="display:flex;  align-items: center;">
+                                <img class="student_photo" src="./images/students-images/abbott_h.png"
+                                    alt="student's photo">
+                                <p>Name</p>
+                            </div>
+                            <div>
+                                <p>Surname</p>
+                            </div>
+                            <div>
+                                <p>House</p>
+                            </div>
+                            <div>
+                                <p>Responsibility</p>
+                            </div>
+                            <div>
+                                <p>Status</p>
+                            </div>
+                            <div>
+                                <img src="./images/icons/icon-see_details.png" alt="see details"
+                                    style="padding-right: 30px;">
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
         </section>
     </main>
 
 
 
     <footer>
-        <h1>CHECKING MARGINS</h1>
+        <p>FOOTER CHECKING MARGINS</p>
     </footer>
 
 </body>
