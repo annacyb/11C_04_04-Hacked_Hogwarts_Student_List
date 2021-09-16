@@ -81,6 +81,11 @@ header {
     margin-right: auto;
   }
 
+  .flex-align-center {
+    display:flex; 
+    align-items: center;
+  }
+
 
   /* HEADER --> inside #global_menu */
 
@@ -152,7 +157,7 @@ header {
 #search_elements_wrapper {
     display: grid;
     grid-template-columns: 17% 83%;
-    grid-template-rows: 40px auto 30px 20px;
+    grid-template-rows: 20px auto 30px 20px;
     grid-column-gap: 25px;
     grid-row-gap: 0px;
 }
@@ -212,7 +217,7 @@ li {
 }
 
 .li_item-active {
-    background-color: #EAE5DD;
+    background-color: #ebe6dd;
     border-radius: 50px;
 }
 
@@ -225,6 +230,7 @@ li {
     grid-column: 2 / span 1;
     background-color: #EAE5DD;
     border-radius: 20px;
+    padding-bottom: 40px;
 }
 
 #search_name {
@@ -240,7 +246,7 @@ li {
     width: 5vw;
     height: 44px;
     margin-top: 20px;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     border: 0px;
     border-radius: 10px;
     /* box-shadow: 0px 5px 10px 0px rgb(229 224 217 / 40%); */
@@ -263,12 +269,25 @@ li {
 /* Search results container */
 
 #table_headers {
-    display: flex;
-    padding-left: 8%;
-    padding-right: 8%;
-    padding-top: 15px;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 0.5fr;
+    grid-template-rows: 100%;
+    grid-column-gap: 15px;
+    grid-row-gap: 0px;
+
+    font-weight: 600;
+    font-size: 0.9em;
+    opacity: 0.8;
+    padding-left: 4%;
+    padding-right: 4%;
+    padding-top: 20px;
 }
+
+#table_headers > div > img {
+    opacity: 0;
+}
+
+
 .table_header {
     display: flex;
     align-items: center;
@@ -289,8 +308,12 @@ li {
 
 /* table elements */
 .table_element {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 0.5fr;
+    grid-template-rows: 100%;
+    grid-column-gap: 15px;
+    grid-row-gap: 0px;
+
     align-items: center;
     background-color: #FAF6F1;
     border-radius: 15px;
@@ -298,17 +321,67 @@ li {
     margin-right: 4%;
     padding-top: 10px;
     padding-bottom: 10px;
-    box-shadow: 0px 3px 10px 0px rgb(171 157 137 / 30%);
+    box-shadow: 0px 3px 10px 0px rgb(171 157 137 / 40%);
+    margin-bottom: 5px;
+    border: 1px solid #FAF6F1;
+
+    opacity: 0.9;
+}
+
+.table_element:hover {
+    opacity: 1;
+    background-color: #fdfaf5;
+    border: 1px solid #a29c93;
 }
 
 .student_photo {
-    height: 60px;
+    height: 50px;
     width: auto;
     padding-left: 20px;
     padding-right: 20px;
 }
 
+.circle_gryffindor {
+    width: 12px;
+    height: 12px;
+    border: 1px solid #8C2631;
+    border-radius: 25px;
+    background: #8C2631; 
+    margin-right: 10px;  
+}
 
+.circle_hufflepuff {
+    width: 12px;
+    height: 12px;
+    border: 1px solid #F3C86E;
+    border-radius: 25px;
+    background: #F3C86E; 
+    margin-right: 10px; 
+}
+
+.circle_slytherin {
+    width: 12px;
+    height: 12px;
+    border: 1px solid #165142;
+    border-radius: 25px;
+    background: #165142; 
+    margin-right: 10px; 
+}
+
+.circle_ravenclaw {
+    width: 12px;
+    height: 12px;
+    border: 1px solid #5B8BC6;
+    border-radius: 25px;
+    background: #5B8BC6; 
+    margin-right: 10px; 
+}
+
+.icon-element-size {
+    height: 20px;
+    width: auto;
+    padding-right: 10px;
+}
 
 
 

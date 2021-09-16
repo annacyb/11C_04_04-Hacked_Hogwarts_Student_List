@@ -36,7 +36,8 @@
     <main>
         <section id="search_elements_wrapper">
             <div id="search_elements">
-                <input type="text" name="searchName" id="search_name" />
+                <input type="text" name="searchName" id="search_name"
+                    placeholder="Search name or surname of a student" />
                 <button id="search_button">Search</button>
             </div>
             <p id="students_found">Students found: 25</p>
@@ -60,7 +61,7 @@
 
                         <a class="filter-Slytherin">
                             <li class="filter-house_name_items li_item-flex">
-                                <div class="circle_active"></div>
+                                <div class="circle_inactive"></div>
                                 <!-- <img src="../images/icon-unselected_filtering_element.svg" alt="Filter icon"> -->
                                 <p>Slytherin</p>
                             </li>
@@ -114,8 +115,8 @@
                     </a>
                     <ul class="filter-collection_elements">
                         <a class="filter-Prefect">
-                            <li class="filter-house_name_items li_item-flex li_item-active">
-                                <div class="circle_active"></div>
+                            <li class="filter-house_name_items li_item-flex">
+                                <div class="circle_inactive"></div>
                                 <p>Prefect</p>
                             </li>
                         </a>
@@ -165,51 +166,27 @@
 
             </div>
             <div id="search_results">
-                <!-- <div id="table_headers">
-                    <div class="table_header">
+
+                <div id="table_headers">
+                    <div style="display: flex;">
+                        <img style="opacity: 0; height: 35px; padding-left: 30px; padding-right: 25px;"
+                            src="./images/students-images/abbott_h.png" alt="student's photo">
                         <p>Name</p>
-                        <img src="./images/icons/sort-icon.png" alt="sort icon">
                     </div>
-                    <div class="table_header">
+                    <div>
                         <p>Surname</p>
-                        <img src="./images/icons/sort-icon-asc.png" alt="sort icon">
                     </div>
-                    <div class="table_header">
-                        <p>House Name</p>
+                    <div>
+                        <p>House name</p>
                     </div>
-                    <div class="table_header">
+                    <div>
                         <p>Responsibility</p>
                     </div>
-                    <div class="table_header">
+                    <div>
                         <p>Status</p>
                     </div>
-
-                </div> -->
-
-
-                <div id="search_results">
-                    <div id="table_headers">
-                        <div style="display: flex;">
-                            <img style="opacity: 0;" class="student_photo" src="./images/students-images/abbott_h.png"
-                                alt="student's photo">
-                            <p>Name</p>
-                        </div>
-                        <div>
-                            <p>Surname</p>
-                        </div>
-                        <div>
-                            <p>House name</p>
-                        </div>
-                        <div>
-                            <p>Responsibility</p>
-                        </div>
-                        <div>
-                            <p>Status</p>
-                        </div>
-                        <div>
-                            <img src="./images/icons/icon-see_details.png" alt="see details"
-                                style="padding-right: 30px;">
-                        </div>
+                    <div>
+                        <img src="./images/icons/icon-see_details.png" alt="see details" style="padding-left: 15px;">
                     </div>
                 </div>
 
@@ -217,12 +194,14 @@
 
 
 
+                <!-- TEMPLATE - Student info element -->
 
+                <!-- Student info elements -->
 
                 <a href="">
                     <div id="table_elements">
                         <div class="table_element">
-                            <div style="display:flex;  align-items: center;">
+                            <div class="flex-align-center">
                                 <img class="student_photo" src="./images/students-images/abbott_h.png"
                                     alt="student's photo">
                                 <p>Name</p>
@@ -230,14 +209,19 @@
                             <div>
                                 <p>Surname</p>
                             </div>
-                            <div>
-                                <p>House</p>
+                            <div class="flex-align-center element-house">
+                                <div class="circle_gryffindor"></div>
+                                <p>Gryffindor</p>
                             </div>
-                            <div>
-                                <p>Responsibility</p>
+                            <div class="flex-align-center">
+                                <img class="element-responsibility, icon-element-size"
+                                    src="./images/icons/icon-Prefect.png" alt="">
+                                <p>Prefect</p>
                             </div>
-                            <div>
-                                <p>Status</p>
+                            <div class="flex-align-center">
+                                <img class="element-status, icon-element-size"
+                                    src="./images/icons/icon-active_student.png" alt="">
+                                <p>Active</p>
                             </div>
                             <div>
                                 <img src="./images/icons/icon-see_details.png" alt="see details"
@@ -246,6 +230,271 @@
                         </div>
                     </div>
                 </a>
+
+                <a href="">
+                    <div id="table_elements">
+                        <div class="table_element">
+                            <div class="flex-align-center">
+                                <img class="student_photo" src="./images/students-images/abbott_h.png"
+                                    alt="student's photo">
+                                <p>Name</p>
+                            </div>
+                            <div>
+                                <p>Surname</p>
+                            </div>
+                            <div class="flex-align-center element-house">
+                                <div class="circle_gryffindor"></div>
+                                <p>Gryffindor</p>
+                            </div>
+                            <div class="flex-align-center">
+                                <img class="element-responsibility, icon-element-size"
+                                    src="./images/icons/icon-Prefect.png" alt="">
+                                <p>Prefect</p>
+                            </div>
+                            <div class="flex-align-center">
+                                <img class="element-status, icon-element-size"
+                                    src="./images/icons/icon-active_student.png" alt="">
+                                <p>Active</p>
+                            </div>
+                            <div>
+                                <img src="./images/icons/icon-see_details.png" alt="see details"
+                                    style="padding-right: 30px;">
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="">
+                    <div id="table_elements">
+                        <div class="table_element">
+                            <div class="flex-align-center">
+                                <img class="student_photo" src="./images/students-images/abbott_h.png"
+                                    alt="student's photo">
+                                <p>Name</p>
+                            </div>
+                            <div>
+                                <p>Surname</p>
+                            </div>
+                            <div class="flex-align-center element-house">
+                                <div class="circle_gryffindor"></div>
+                                <p>Gryffindor</p>
+                            </div>
+                            <div class="flex-align-center">
+                                <img class="element-responsibility, icon-element-size"
+                                    src="./images/icons/icon-Prefect.png" alt="">
+                                <p>Prefect</p>
+                            </div>
+                            <div class="flex-align-center">
+                                <img class="element-status, icon-element-size"
+                                    src="./images/icons/icon-active_student.png" alt="">
+                                <p>Active</p>
+                            </div>
+                            <div>
+                                <img src="./images/icons/icon-see_details.png" alt="see details"
+                                    style="padding-right: 30px;">
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="">
+                    <div id="table_elements">
+                        <div class="table_element">
+                            <div class="flex-align-center">
+                                <img class="student_photo" src="./images/students-images/abbott_h.png"
+                                    alt="student's photo">
+                                <p>Name</p>
+                            </div>
+                            <div>
+                                <p>Surname</p>
+                            </div>
+                            <div class="flex-align-center element-house">
+                                <div class="circle_gryffindor"></div>
+                                <p>Gryffindor</p>
+                            </div>
+                            <div class="flex-align-center">
+                                <img class="element-responsibility, icon-element-size"
+                                    src="./images/icons/icon-Prefect.png" alt="">
+                                <p>Prefect</p>
+                            </div>
+                            <div class="flex-align-center">
+                                <img class="element-status, icon-element-size"
+                                    src="./images/icons/icon-active_student.png" alt="">
+                                <p>Active</p>
+                            </div>
+                            <div>
+                                <img src="./images/icons/icon-see_details.png" alt="see details"
+                                    style="padding-right: 30px;">
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="">
+                    <div id="table_elements">
+                        <div class="table_element">
+                            <div class="flex-align-center">
+                                <img class="student_photo" src="./images/students-images/abbott_h.png"
+                                    alt="student's photo">
+                                <p>Name</p>
+                            </div>
+                            <div>
+                                <p>Surname</p>
+                            </div>
+                            <div class="flex-align-center element-house">
+                                <div class="circle_gryffindor"></div>
+                                <p>Gryffindor</p>
+                            </div>
+                            <div class="flex-align-center">
+                                <img class="element-responsibility, icon-element-size"
+                                    src="./images/icons/icon-Prefect.png" alt="">
+                                <p>Prefect</p>
+                            </div>
+                            <div class="flex-align-center">
+                                <img class="element-status, icon-element-size"
+                                    src="./images/icons/icon-active_student.png" alt="">
+                                <p>Active</p>
+                            </div>
+                            <div>
+                                <img src="./images/icons/icon-see_details.png" alt="see details"
+                                    style="padding-right: 30px;">
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="">
+                    <div id="table_elements">
+                        <div class="table_element">
+                            <div class="flex-align-center">
+                                <img class="student_photo" src="./images/students-images/abbott_h.png"
+                                    alt="student's photo">
+                                <p>Name</p>
+                            </div>
+                            <div>
+                                <p>Surname</p>
+                            </div>
+                            <div class="flex-align-center element-house">
+                                <div class="circle_gryffindor"></div>
+                                <p>Gryffindor</p>
+                            </div>
+                            <div class="flex-align-center">
+                                <img class="element-responsibility, icon-element-size"
+                                    src="./images/icons/icon-Prefect.png" alt="">
+                                <p>Prefect</p>
+                            </div>
+                            <div class="flex-align-center">
+                                <img class="element-status, icon-element-size"
+                                    src="./images/icons/icon-active_student.png" alt="">
+                                <p>Active</p>
+                            </div>
+                            <div>
+                                <img src="./images/icons/icon-see_details.png" alt="see details"
+                                    style="padding-right: 30px;">
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="">
+                    <div id="table_elements">
+                        <div class="table_element">
+                            <div class="flex-align-center">
+                                <img class="student_photo" src="./images/students-images/abbott_h.png"
+                                    alt="student's photo">
+                                <p>Name</p>
+                            </div>
+                            <div>
+                                <p>Surname</p>
+                            </div>
+                            <div class="flex-align-center element-house">
+                                <div class="circle_gryffindor"></div>
+                                <p>Gryffindor</p>
+                            </div>
+                            <div class="flex-align-center">
+                                <img class="element-responsibility, icon-element-size"
+                                    src="./images/icons/icon-Prefect.png" alt="">
+                                <p>Prefect</p>
+                            </div>
+                            <div class="flex-align-center">
+                                <img class="element-status, icon-element-size"
+                                    src="./images/icons/icon-active_student.png" alt="">
+                                <p>Active</p>
+                            </div>
+                            <div>
+                                <img src="./images/icons/icon-see_details.png" alt="see details"
+                                    style="padding-right: 30px;">
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="">
+                    <div id="table_elements">
+                        <div class="table_element">
+                            <div class="flex-align-center">
+                                <img class="student_photo" src="./images/students-images/abbott_h.png"
+                                    alt="student's photo">
+                                <p>Name</p>
+                            </div>
+                            <div>
+                                <p>Surname</p>
+                            </div>
+                            <div class="flex-align-center element-house">
+                                <div class="circle_gryffindor"></div>
+                                <p>Gryffindor</p>
+                            </div>
+                            <div class="flex-align-center">
+                                <img class="element-responsibility, icon-element-size"
+                                    src="./images/icons/icon-Prefect.png" alt="">
+                                <p>Prefect</p>
+                            </div>
+                            <div class="flex-align-center">
+                                <img class="element-status, icon-element-size"
+                                    src="./images/icons/icon-active_student.png" alt="">
+                                <p>Active</p>
+                            </div>
+                            <div>
+                                <img src="./images/icons/icon-see_details.png" alt="see details"
+                                    style="padding-right: 30px;">
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="">
+                    <div id="table_elements">
+                        <div class="table_element">
+                            <div class="flex-align-center">
+                                <img class="student_photo" src="./images/students-images/abbott_h.png"
+                                    alt="student's photo">
+                                <p>Name</p>
+                            </div>
+                            <div>
+                                <p>Surname</p>
+                            </div>
+                            <div class="flex-align-center element-house">
+                                <div class="circle_gryffindor"></div>
+                                <p>Gryffindor</p>
+                            </div>
+                            <div class="flex-align-center">
+                                <img class="element-responsibility, icon-element-size"
+                                    src="./images/icons/icon-Prefect.png" alt="">
+                                <p>Prefect</p>
+                            </div>
+                            <div class="flex-align-center">
+                                <img class="element-status, icon-element-size"
+                                    src="./images/icons/icon-active_student.png" alt="">
+                                <p>Active</p>
+                            </div>
+                            <div>
+                                <img src="./images/icons/icon-see_details.png" alt="see details"
+                                    style="padding-right: 30px;">
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
             </div>
         </section>
     </main>
