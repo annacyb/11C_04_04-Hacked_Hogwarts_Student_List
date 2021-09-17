@@ -399,7 +399,7 @@ li {
     padding-right: 20px;
 }
 
-.circle_gryffindor {
+.circle_Gryffindor {
     width: 12px;
     height: 12px;
     border: 1px solid #8C2631;
@@ -408,7 +408,7 @@ li {
     margin-right: 10px;  
 }
 
-.circle_hufflepuff {
+.circle_Hufflepuff {
     width: 12px;
     height: 12px;
     border: 1px solid #F3C86E;
@@ -417,7 +417,7 @@ li {
     margin-right: 10px; 
 }
 
-.circle_slytherin {
+.circle_Slytherin {
     width: 12px;
     height: 12px;
     border: 1px solid #165142;
@@ -426,7 +426,7 @@ li {
     margin-right: 10px; 
 }
 
-.circle_ravenclaw {
+.circle_Ravenclaw {
     width: 12px;
     height: 12px;
     border: 1px solid #5B8BC6;
