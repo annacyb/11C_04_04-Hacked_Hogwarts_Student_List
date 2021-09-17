@@ -39,7 +39,7 @@
                 <input type="text" name="searchName" id="search_name" placeholder="Search student's name or surname" />
                 <button id="search_button">Search</button>
             </div>
-            <p id="students_found">Students found: 25</p>
+            <p id="students_found"></p>
         </section>
         <section id="main">
             <div id="filters_wrapper">
@@ -174,9 +174,11 @@
                         <img style="opacity: 0; height: 35px; padding-left: 30px; padding-right: 25px;"
                             src="./images/students-images/abbott_h.png" alt="student's photo">
                         <p>Name</p>
+                        <img class="table_header_icon" src="./images/icons/sort-icon.png" alt="sort">
                     </div>
-                    <div>
+                    <div style="display: flex;">
                         <p>Surname</p>
+                        <img class="table_header_icon" src="./images/icons/sort-icon.png" alt="sort">
                     </div>
                     <div>
                         <p>House name</p>
@@ -247,6 +249,5 @@
 
 </body>
 <script src="script.js"></script>
-<script src="fetch_info_and_load_images.js"></script>
 
 </html>
