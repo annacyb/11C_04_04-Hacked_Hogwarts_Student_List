@@ -3,26 +3,26 @@
 window.addEventListener("DOMContentLoaded", start)
 
 const allStudents = []
-const statStudents = {
+const statsStudents = {
     house: {
-        griffindor: 0,
-        slytherin: 0,
-        hufflepuff: 0,
-        ravenclaw: 0
+        Gryffindor: 0,
+        Slytherin: 0,
+        Hufflepuff: 0,
+        Ravenclaw: 0
     },
     status: {
-        active: 0,
-        expelled: 0
+        Active: 0,
+        Expelled: 0
     },
     responsibility: {
-        prefect: 0,
-        inquisitor: 0,
-        quiddich: 0
+        Prefect: 0,
+        Inquisitor: 0,
+        Quiddich: 0
     },
     blood: {
-        pure: 0,
-        half: 0,
-        mud: 0
+        Pure: 0,
+        Half: 0,
+        Mud: 0
     }
 }
 
@@ -35,7 +35,8 @@ const Student = {
     imageFilename: "x",
     house: "x",
     houseColor: "",
-    gender: "x"
+    gender: "x",
+    status: "x"
 }
 
 function start( ) {
@@ -53,9 +54,10 @@ function loadJSON() {
     fetch("https://petlatkea.dk/2021/hogwarts/students.json")
     .then( response => response.json() )
     .then( jsonData => {
-        // when loaded, prepare objects
+        // when loaded, prepare objects and stats
         prepareObjects( jsonData )
         prepareStats()
+        showStats()
     })
 }
 
@@ -97,9 +99,10 @@ function prepareObjects( jsonData ) {
         allStudents.push(student)
         // console.log(student)
     })
+
+    console.log(allStudents)
     
     displayList()
-    displayNumberOfResults()
 }
 
 function makeFirstLetterUppercase(input) {
@@ -190,19 +193,21 @@ function getProfileImage(firstName, lastName) {
 }
 
 
-
 function prepareStats() {
     allStudents.forEach (student => {
-        let gryffindorStudents = countNumbersForFilters(student, "Gryffindor")
-        let slytherinStudents = countNumbersForFilters(student, "Slytherin")
-        let hufflepuffStudents = countNumbersForFilters(student, "Hufflepuff")
-        let RavenclawStudents = countNumbersForFilters(student, "Ravenclaw")
+        countStatsForFilters(student, "house", "Gryffindor")
+        countStatsForFilters(student, "house", "Slytherin")
+        countStatsForFilters(student, "house", "Hufflepuff")
+        countStatsForFilters(student, "house", "Ravenclaw")
+
+        // TO DO MORE FILTERS NUMBERS
     })
 }
 
-function countNumbersForFilters(student, filter) {
-    if (student.house === filter) {
-        console.log("HOUSE", filter)
+function countStatsForFilters(student, category, filter) {
+    if (student[category] == filter) {
+        statsStudents[category][filter] = statsStudents[category][filter] + 1
+        // console.log(category, filter, statsStudents[category][filter])
     }
 }
 
@@ -221,25 +226,14 @@ function displayStudents( student ) {
     // create clone
     const clone = document.querySelector("template.student_list-element").content.cloneNode(true)
     
-    // set clone data
-
-    //TO DO - no-photo
-
-
-
-    // if (student.imageFilename == "./images/students-images/-_l.png") {
-    //     clone.querySelector(".student_photo").src = "./images/no-photo.png"
-    // }
-
-    // console.log(student.imageFilename)
-    
+    // set clone data    
     const image = clone.querySelector(".student_photo")
     image.src = student.imageFilename
     image.alt = student.firstName + "'s photo"
     // checks if image exists
     image.addEventListener("error", () => {
         image.src = './images/no-photo.png'
-    });
+    })
     
     clone.querySelector("p.student_name").textContent = student.firstName + " " + student.middleName
     clone.querySelector("p.student_last_name").textContent = student.lastName
@@ -248,8 +242,6 @@ function displayStudents( student ) {
 
     // TO DO - responsibility + icon
     // TO DO - status active/expelled + icon
-    // TO DO - a href link
-    // myCopy.querySelector("#productlistLink").href = `../product-view.html?id=${data._id}`;
 
     // clone.querySelector("[data-field=nickName]").textContent = student.nickName
     // clone.querySelector("[data-field=gender]").textContent = student.gender
@@ -258,12 +250,16 @@ function displayStudents( student ) {
     document.querySelector("#students_list").appendChild( clone )
 }
 
-function displayNumberOfResults() {
+
+function showStats() {
     // display number of students in list
     document.querySelector("#students_found").textContent = "Students found: " + allStudents.length
     
     // display numbers in filters
-    document.querySelector(".filter-Gryffindor li p").textContent = "Gryffindor (" + "??????" + ")"
+    document.querySelector(".filter-Gryffindor li p").textContent = "Gryffindor (" + statsStudents.house.Gryffindor + ")"
+    document.querySelector(".filter-Slytherin li p").textContent = "Slytherin (" + statsStudents.house.Slytherin + ")"
+    document.querySelector(".filter-Hufflepuff li p").textContent = "Hufflepuff (" + statsStudents.house.Hufflepuff + ")"
+    document.querySelector(".filter-Ravenclaw li p").textContent = "Ravenclaw (" + statsStudents.house.Ravenclaw + ")"
 
-
+    // TO DO MORE FILTERS
 }

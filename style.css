@@ -2,14 +2,6 @@
 @import url('https://fonts.googleapis.com/css2?family=El+Messiri&display=swap');
 
 :root {
-  /* --color-button: #c58b71;
-  --color-font: #b17458;
-  --color-shape1: #8c9e6b;
-  --color-shape2: #f3decf;
-  --color-shape3: #f3cf90;
-  --color-background: #faf5f1;
-  --color-background2: #f5e8d6; */
-
   font-family: 'Open sans', sans-serif;
   font-weight: 400;
   font-style: normal;
@@ -396,6 +388,7 @@ li {
     border: 1px solid #FAF6F1;
 
     opacity: 0.9;
+    cursor: pointer;
 }
 
 .table_element:hover {
