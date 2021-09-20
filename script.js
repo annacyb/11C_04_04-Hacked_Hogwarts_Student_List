@@ -154,28 +154,26 @@ function reset_filter_data() {
 function display_all_filters_as_unselected(){
     // looping throught currentFilters elements and making elements look unselected
 
-    currentFilters.house.forEach(unselectFilterItems)
-    currentFilters.status.forEach(unselectFilterItems)
-    currentFilters.responsibility.forEach(unselectFilterItems)
-    currentFilters.blood.forEach(unselectFilterItems)
+    // TO DO
+    // let house_options = [...house_container.children] //to create a list with children elements
+    // house_options.forEach((container) => {
+    //     // container.addEventListener("click", click_filter_element.bind(null, container, "house"))
+    // })
 
 
 
-    //USUNAC TEMPLATE Z HTML DLA FILTERS WRAPPER!!
-    
-    // // NIE MOGE TAK ZROBIC BO TRACE EVENT LISTENERY itp :< ZROBIC TAK ZEBY BYLY FILTRY TAK JAK NA POCZATKU
-    // const filtersWrapper = document.querySelector("#filters_wrapper")
-    // const currentFiltersElement = filtersWrapper.getElementsByTagName('div')[0]
-    // console.log(currentFiltersElement)
 
-    // // create clone
-    // const clone = document.querySelector("template.unselected_filters").content.cloneNode(true)
-    
-    // // delete current filters
-    // filtersWrapper.removeChild(currentFiltersElement)
 
-    // // append clone to list
-    // filtersWrapper.appendChild( clone )
+    // currentFilters.house.forEach(unselectFilterItems)
+    // currentFilters.status.forEach(unselectFilterItems)
+    // currentFilters.responsibility.forEach(unselectFilterItems)
+    // currentFilters.blood.forEach(unselectFilterItems)
+
+    // // add event listeners for multiple options
+    // let house_options = [...house_container.children] //to create a list with children elements
+    // house_options.forEach((container) => {
+    //     container.addEventListener("click", click_filter_element.bind(null, container, "house"))
+    // })
 
 }
 

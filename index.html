@@ -47,138 +47,6 @@
 
             <div id="filters_wrapper">
 
-                <!-- TO DELETE? -->
-                <!-- TEMPLATE - for resetting filters -->
-                <!-- <template class="unselected_filters">
-                    <div id="filter_by" class="">
-                        <a class="filter-category-collection">
-                            <div class="filtering_category">
-                                <p>House name</p>
-                            </div>
-                        </a>
-                        <ul class="filter-collection_elements">
-                            <a class="filter-Gryffindor">
-                                <li class="filter-house_name_items li_item-flex">
-                                    <div class="circle_inactive"></div>
-                                    <p>Gryffindor</p>
-                                </li>
-                            </a>
-
-                            <a class="filter-Slytherin">
-                                <li class="filter-house_name_items li_item-flex">
-                                    <div class="circle_inactive"></div>
-                                    <p>Slytherin</p>
-                                </li>
-                            </a>
-
-                            <a class="filter-Hufflepuff">
-                                <li class="filter-house_name_items li_item-flex">
-                                    <div class="circle_inactive"></div>
-                                    <p>Hufflepuff</p>
-                                </li>
-                            </a>
-
-                            <a class="filter-Ravenclaw">
-                                <li class="filter-house_name_items li_item-flex">
-                                    <div class="circle_inactive"></div>
-                                    <p>Ravenclaw</p>
-                                </li>
-                            </a>
-                        </ul>
-
-
-                        <a class="filter-category-collection">
-                            <div class="filtering_category">
-                                <p>Status</p>
-                            </div>
-                        </a>
-                        <ul class="filter-collection_elements">
-                            <a class="filter-Active_students">
-                                <li class="filter-house_name_items li_item-flex">
-                                    <div class="circle_inactive"></div>
-                                    <p>Active students</p>
-                                </li>
-                            </a>
-
-                            <a class="filter-Expelled_students">
-                                <li class="filter-house_name_items li_item-flex">
-                                    <div class="circle_inactive"></div>
-                                    <p>Expelled students</p>
-                                </li>
-                            </a>
-                        </ul>
-
-
-                        <a class="filter-category-collection">
-                            <div class="filtering_category">
-                                <p>Responsibility</p>
-                            </div>
-                        </a>
-                        <ul class="filter-collection_elements">
-                            <a class="filter-Prefect">
-                                <li class="filter-house_name_items li_item-flex">
-                                    <div class="circle_inactive"></div>
-                                    <p>Prefect</p>
-                                </li>
-                            </a>
-
-                            <a class="filter-Inquisitorial_Squad">
-                                <li class="filter-house_name_items li_item-flex">
-                                    <div class="circle_inactive"></div>
-                                    <p>Inquisitorial Squad</p>
-                                </li>
-                            </a>
-
-                            <a class="filter-Quidditch_player">
-                                <li class="filter-house_name_items li_item-flex">
-                                    <div class="circle_inactive"></div>
-                                    <p>Quidditch player</p>
-                                </li>
-                            </a>
-                        </ul>
-
-
-                        <a class="filter-category-collection">
-                            <div class="filtering_category">
-                                <p>Blood type</p>
-                            </div>
-                        </a>
-                        <ul class="filter-collection_elements">
-                            <a class="filter-Pure-blood">
-                                <li class="filter-house_name_items li_item-flex">
-                                    <div class="circle_inactive"></div>
-                                    <p>Pure-blood</p>
-                                </li>
-                            </a>
-
-                            <a class="filter-Half-blood">
-                                <li class="filter-house_name_items li_item-flex">
-                                    <div class="circle_inactive"></div>
-                                    <p>Half-blood</p>
-                                </li>
-                            </a>
-
-                            <a class="filter-Mud-blood">
-                                <li class="filter-house_name_items li_item-flex">
-                                    <div class="circle_inactive"></div>
-                                    <p>Mud-blood</p>
-                                </li>
-                            </a>
-                        </ul>
-                        <div>
-                            <button id="reset_button"><span><img src="./images/icons/icon-reset.png"
-                                        alt=""></span>Reset</button>
-                        </div>
-
-                    </div>
-
-                </template> -->
-
-
-
-
-
-
                 <div id="filter_by">
                     <a class="filter-category-collection">
                         <div class="filtering_category">
@@ -382,14 +250,58 @@
             </div>
         </section>
 
-        <section id="pop_up-wrapper" class="hidden">
+        <section id="pop_up-wrapper" class="">
             <div id="pop_up-background"></div>
 
             <div id="pop_up">
                 <div class="pop_up-gradient-top pop_up-gradient-top-Slytherin">
+                    <img class="pop_up-decorative-line-left" src="./images/left-decorative-line.png" alt="">
                     <img class="pop_up-image" src="./images/students-images/abbott_h.png" alt="">
+                    <img class="pop_up-decorative-line-right" src="./images/right-decorative-line.png" alt="">
+                    <img class="pop_up-button" src="./images/button-pop-up-close.png" alt="button close">
                     <img class="pop_up-name-background" src="./images/pop_up-name_background.png" alt="">
+                    <div>
+                        <h1 id="pop_up-main-name">Anna Undefined Cybulska</h1>
+                        <!-- <p>First name:<span>Anna</span></p>
+                        <p>Middlename:<span>Undefined</span></p>
+                        <p>Surname:<span>Cybulska</span></p>
+
+                        <p>Nick name:<span>Ania</span></p>
+                        <p>Gender:<span>Girl</span></p>
+                        <p>Bloodstatus:<span>Half blood</span></p>
+                        <p>Status:<span>Anna</span></p>
+                        <p>House:<span>Anna</span></p> -->
+
+                        <div id="pop_up-text_elements">
+                            <div id="pop_up-headers">
+                                <p id="pop_up-header-name">First name:</p>
+                                <p id="pop_up-header-middlename">Middle name:</p>
+                                <p id="pop_up-header-surname">Surname:</p>
+                                <p id="pop_up-header-nickname">Nick name:</p>
+                                <p id="pop_up-header-gender">Gender:</p>
+                                <p id="pop_up-header-blood">Bloodstatus:</p>
+                                <p id="pop_up-header-status">Status:</p>
+                                <p id="pop_up-header-house">House:</p>
+                            </div>
+                            <div id="pop_up-values">
+                                <p id="pop_up-value-name">Anna</p>
+                                <p id="pop_up-value-middlename">Undefined</p>
+                                <p id="pop_up-value-surname">Cybulska</p>
+                                <p id="pop_up-value-nickname">Ania</p>
+                                <p id="pop_up-value-gender">Girl</p>
+                                <p id="pop_up-value-blood">Half blood</p>
+                                <p id="pop_up-value-status">Active student</p>
+                                <p id="pop_up-value-house">Gryffindor</p>
+                            </div>
+                            <img id="pop_up-house-symbol" src="./images/houses/hogwarts-house-slytherin2.png"
+                                alt="house symbol">
+                            <div id="pop_up-responsibilities-wrapper"></div>
+
+                        </div>
+                    </div>
+
                 </div>
+            </div>
             </div>
         </section>
 
