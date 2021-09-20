@@ -2,7 +2,15 @@
 
 window.addEventListener("DOMContentLoaded", start)
 
-const allStudents = []
+let allStudents = []
+
+const currentFilters = {
+    house: [],
+    status: [],
+    responsibility: [],
+    blood: [],
+}
+
 const statsStudents = {
     house: {
         Gryffindor: 0,
@@ -16,14 +24,19 @@ const statsStudents = {
     },
     responsibility: {
         Prefect: 0,
-        Inquisitor: 0,
-        Quiddich: 0
+        Inquisitorial: 0,
+        Quidditch: 0
     },
     blood: {
         Pure: 0,
         Half: 0,
         Mud: 0
     }
+}
+
+let filterBy = {
+    column: '',
+    value: ''
 }
 
 // creating object prototype
@@ -39,26 +52,167 @@ const Student = {
     status: "x"
 }
 
-function start( ) {
-    console.log("ready")
+function start() {
     setEventListeners()
     loadJSON()
+    setTimeout(displayList, 1000)
 }
 
 function setEventListeners() {
     // event listeners on: sort icons, filter items, buttons, table elements
+    setup_filters_listeners()
+    setup_reset_button_listener()
+}
+
+function setup_filters_listeners() {
+    const container_filters = document.getElementById("filter_by")
+
+    const house_container = container_filters.getElementsByClassName("filter-collection_elements")[0]
+    const status_container = container_filters.getElementsByClassName("filter-collection_elements")[1]
+    const responsibility_container = container_filters.getElementsByClassName("filter-collection_elements")[2]
+    const blood_container = container_filters.getElementsByClassName("filter-collection_elements")[3]
+    
+    
+    // add event listeners for multiple options
+    let house_options = [...house_container.children] //to create a list with children elements
+    house_options.forEach((container) => {
+        container.addEventListener("click", click_filter_element.bind(null, container, "house"))
+    })
+
+    let status_options = [...status_container.children] //to create a list with children elements
+    status_options.forEach((container) => {
+        container.addEventListener("click", click_filter_element.bind(null, container, "status"))
+    })
+
+    let responsibility_options = [...responsibility_container.children] //to create a list with children elements
+    responsibility_options.forEach((container) => {
+        container.addEventListener("click", click_filter_element.bind(null, container, "responsibility"))
+    })
+
+    let blood_options = [...blood_container.children] //to create a list with children elements
+    blood_options.forEach((container) => {
+        container.addEventListener("click", click_filter_element.bind(null, container, "blood"))
+    })
+
+
+}
+
+ function click_filter_element(filter_button, type) {
+    console.log("BUTTON", filter_button, "TYPE ", type)
+    toggle_click(filter_button.children[0])
+
+    // save (ONE) selected filter element
+    let type_name = filter_button.children[0].children[1].textContent
+    const nameSplit = type_name.split(" ")
+    const selectedElementsName = nameSplit[0]
+    
+    if (currentFilters[type].includes(selectedElementsName)) {
+        // removes selected filter's element name from the list if it already exist
+        currentFilters[type] = currentFilters[type].filter(i => i !== selectedElementsName)
+    } else {
+        // adds selected filter's element name to the list if it does not already exist
+        currentFilters[type].push(selectedElementsName)
+    }
+    
+    // Run filter on (ALL) selected filters
+    loadJSON()
+    filterData("house", currentFilters.house)
+    filterData("status", currentFilters.status)
+    filterData("responsibility", currentFilters.responsibility)
+    filterData("blood", currentFilters.blood)
+
+    // changeFiltering(type, selectedElementsName)
+
+    // sort()
+
+    resetStats()
+    prepareStats()
+    showStats()
+    displayList()
+}
+
+function filterData(column, values) {
+    if(values.length > 0) {
+        allStudents = allStudents.filter(student => {
+            // values - selected filters
+            // student[column] - student's one value from category from filters
+            return values.includes(student[column])
+        })
+    }
 }
 
 
+function reset_filter_data() {
+    display_all_filters_as_unselected()
+
+    currentFilters.house = []
+    currentFilters.status = []
+    currentFilters.responsibility = []
+    currentFilters.blood = []
+}
+
+function display_all_filters_as_unselected(){
+    // looping throught currentFilters elements and making elements look unselected
+
+    currentFilters.house.forEach(unselectFilterItems)
+    currentFilters.status.forEach(unselectFilterItems)
+    currentFilters.responsibility.forEach(unselectFilterItems)
+    currentFilters.blood.forEach(unselectFilterItems)
+
+
+
+    //USUNAC TEMPLATE Z HTML DLA FILTERS WRAPPER!!
+    
+    // // NIE MOGE TAK ZROBIC BO TRACE EVENT LISTENERY itp :< ZROBIC TAK ZEBY BYLY FILTRY TAK JAK NA POCZATKU
+    // const filtersWrapper = document.querySelector("#filters_wrapper")
+    // const currentFiltersElement = filtersWrapper.getElementsByTagName('div')[0]
+    // console.log(currentFiltersElement)
+
+    // // create clone
+    // const clone = document.querySelector("template.unselected_filters").content.cloneNode(true)
+    
+    // // delete current filters
+    // filtersWrapper.removeChild(currentFiltersElement)
+
+    // // append clone to list
+    // filtersWrapper.appendChild( clone )
+
+}
+
+function unselectFilterItems(item) {
+    console.log("ITEM ", item)
+    // zaznaczyc container i pojsc w dol zeby odnalezc elementy
+    // zrobic to z pomoca forEach x 2
+
+    // TO DO!!!
+
+    // const filterContainer = document.querySelector("#filter_by")
+    // const arrayCollections = []
+    // // ...
+    // arrayCollections.forEach(collection => {
+    //     // ...
+    // })
+
+    
+}
+
+function setup_reset_button_listener() {
+    const resetButton = document.querySelector("#reset_button")
+    resetButton.addEventListener("click", reset_filter_data)
+}
+
 function loadJSON() {
     fetch("https://petlatkea.dk/2021/hogwarts/students.json")
-    .then( response => response.json() )
-    .then( jsonData => {
-        // when loaded, prepare objects and stats
-        prepareObjects( jsonData )
-        prepareStats()
-        showStats()
-    })
+        .then( response => response.json() )
+        .then( jsonData => {
+            //
+            // when loaded, prepare objects and stats
+            allStudents = []
+            prepareObjects( jsonData )
+            resetStats()
+            prepareStats()
+            showStats()
+        })
 }
 
 function prepareObjects( jsonData ) {
@@ -99,10 +253,6 @@ function prepareObjects( jsonData ) {
         allStudents.push(student)
         // console.log(student)
     })
-
-    console.log(allStudents)
-    
-    displayList()
 }
 
 function makeFirstLetterUppercase(input) {
@@ -126,7 +276,7 @@ function makeFirstLetterUppercase(input) {
 function createHouseColor(houseName) {
     let houseColorHEX  = ""
     if (houseName == "Gryffindor") {
-        houseColorHEX = "#8C2631"
+        houseColorHEX = "#821E29"
     }
     if (houseName == "Slytherin") {
         houseColorHEX = "#165142"
@@ -135,7 +285,7 @@ function createHouseColor(houseName) {
         houseColorHEX = "#F3C86E"
     }
     if (houseName == "Ravenclaw") {
-        houseColorHEX = "#5B8BC6"
+        houseColorHEX = "#5B9BC6"
     }
     return houseColorHEX
 }
@@ -192,6 +342,23 @@ function getProfileImage(firstName, lastName) {
     return imagePath
 }
 
+function resetStats(){
+    statsStudents.house.Gryffindor = 0
+    statsStudents.house.Slytherin = 0
+    statsStudents.house.Hufflepuff = 0
+    statsStudents.house.Ravenclaw = 0
+
+    statsStudents.status.Active = 0
+    statsStudents.status.Expelled = 0
+
+    statsStudents.responsibility.Prefect = 0
+    statsStudents.responsibility.Inquisitorial = 0
+    statsStudents.responsibility.Quidditch = 0
+
+    statsStudents.blood.Pure = 0
+    statsStudents.blood.Half = 0
+    statsStudents.blood.Mud = 0
+}
 
 function prepareStats() {
     allStudents.forEach (student => {
@@ -207,7 +374,6 @@ function prepareStats() {
 function countStatsForFilters(student, category, filter) {
     if (student[category] == filter) {
         statsStudents[category][filter] = statsStudents[category][filter] + 1
-        // console.log(category, filter, statsStudents[category][filter])
     }
 }
 
@@ -262,4 +428,19 @@ function showStats() {
     document.querySelector(".filter-Ravenclaw li p").textContent = "Ravenclaw (" + statsStudents.house.Ravenclaw + ")"
 
     // TO DO MORE FILTERS
+}
+
+
+function toggle_click(button) {
+
+    // changes only the visual style nothing else
+    if (button.children[0].classList.contains("circle_inactive") == true) {
+        button.children[0].classList.remove("circle_inactive")
+        button.children[0].classList.add("circle_active")
+        button.classList.add("li_item-active")
+    } else {
+        button.children[0].classList.remove("circle_active")
+        button.children[0].classList.add("circle_inactive")
+        button.classList.remove("li_item-active")
+    }
 }

@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="pop_up.css">
     <title>Document</title>
 </head>
 
@@ -42,9 +43,143 @@
             <p id="students_found"></p>
         </section>
         <section id="main">
+
+
             <div id="filters_wrapper">
 
-                <div id="filter_by" class="">
+                <!-- TO DELETE? -->
+                <!-- TEMPLATE - for resetting filters -->
+                <!-- <template class="unselected_filters">
+                    <div id="filter_by" class="">
+                        <a class="filter-category-collection">
+                            <div class="filtering_category">
+                                <p>House name</p>
+                            </div>
+                        </a>
+                        <ul class="filter-collection_elements">
+                            <a class="filter-Gryffindor">
+                                <li class="filter-house_name_items li_item-flex">
+                                    <div class="circle_inactive"></div>
+                                    <p>Gryffindor</p>
+                                </li>
+                            </a>
+
+                            <a class="filter-Slytherin">
+                                <li class="filter-house_name_items li_item-flex">
+                                    <div class="circle_inactive"></div>
+                                    <p>Slytherin</p>
+                                </li>
+                            </a>
+
+                            <a class="filter-Hufflepuff">
+                                <li class="filter-house_name_items li_item-flex">
+                                    <div class="circle_inactive"></div>
+                                    <p>Hufflepuff</p>
+                                </li>
+                            </a>
+
+                            <a class="filter-Ravenclaw">
+                                <li class="filter-house_name_items li_item-flex">
+                                    <div class="circle_inactive"></div>
+                                    <p>Ravenclaw</p>
+                                </li>
+                            </a>
+                        </ul>
+
+
+                        <a class="filter-category-collection">
+                            <div class="filtering_category">
+                                <p>Status</p>
+                            </div>
+                        </a>
+                        <ul class="filter-collection_elements">
+                            <a class="filter-Active_students">
+                                <li class="filter-house_name_items li_item-flex">
+                                    <div class="circle_inactive"></div>
+                                    <p>Active students</p>
+                                </li>
+                            </a>
+
+                            <a class="filter-Expelled_students">
+                                <li class="filter-house_name_items li_item-flex">
+                                    <div class="circle_inactive"></div>
+                                    <p>Expelled students</p>
+                                </li>
+                            </a>
+                        </ul>
+
+
+                        <a class="filter-category-collection">
+                            <div class="filtering_category">
+                                <p>Responsibility</p>
+                            </div>
+                        </a>
+                        <ul class="filter-collection_elements">
+                            <a class="filter-Prefect">
+                                <li class="filter-house_name_items li_item-flex">
+                                    <div class="circle_inactive"></div>
+                                    <p>Prefect</p>
+                                </li>
+                            </a>
+
+                            <a class="filter-Inquisitorial_Squad">
+                                <li class="filter-house_name_items li_item-flex">
+                                    <div class="circle_inactive"></div>
+                                    <p>Inquisitorial Squad</p>
+                                </li>
+                            </a>
+
+                            <a class="filter-Quidditch_player">
+                                <li class="filter-house_name_items li_item-flex">
+                                    <div class="circle_inactive"></div>
+                                    <p>Quidditch player</p>
+                                </li>
+                            </a>
+                        </ul>
+
+
+                        <a class="filter-category-collection">
+                            <div class="filtering_category">
+                                <p>Blood type</p>
+                            </div>
+                        </a>
+                        <ul class="filter-collection_elements">
+                            <a class="filter-Pure-blood">
+                                <li class="filter-house_name_items li_item-flex">
+                                    <div class="circle_inactive"></div>
+                                    <p>Pure-blood</p>
+                                </li>
+                            </a>
+
+                            <a class="filter-Half-blood">
+                                <li class="filter-house_name_items li_item-flex">
+                                    <div class="circle_inactive"></div>
+                                    <p>Half-blood</p>
+                                </li>
+                            </a>
+
+                            <a class="filter-Mud-blood">
+                                <li class="filter-house_name_items li_item-flex">
+                                    <div class="circle_inactive"></div>
+                                    <p>Mud-blood</p>
+                                </li>
+                            </a>
+                        </ul>
+                        <div>
+                            <button id="reset_button"><span><img src="./images/icons/icon-reset.png"
+                                        alt=""></span>Reset</button>
+                        </div>
+
+                    </div>
+
+                </template> -->
+
+
+
+
+
+
+                <div id="filter_by">
                     <a class="filter-category-collection">
                         <div class="filtering_category">
                             <p>House name</p>
@@ -117,8 +252,8 @@
                         </a>
 
                         <a class="filter-Inquisitorial_Squad">
-                            <li class="filter-house_name_items li_item-flex li_item-active">
-                                <div class="circle_active"></div>
+                            <li class="filter-house_name_items li_item-flex">
+                                <div class="circle_inactive"></div>
                                 <p>Inquisitorial Squad</p>
                             </li>
                         </a>
@@ -167,21 +302,27 @@
                 </div>
 
             </div>
+
+
             <div id="search_results">
 
                 <div id="table_headers">
                     <div style="display: flex;">
                         <img style="opacity: 0; height: 35px; padding-left: 30px; padding-right: 25px;"
                             src="./images/students-images/abbott_h.png" alt="student's photo">
-                        <p>Name</p>
-                        <img class="table_header_icon" src="./images/icons/sort-icon.png" alt="sort">
+                        <p id="name_sorting">Name</p>
+                        <img id="name_sorting-icon" class="table_header_icon" src="./images/icons/sort-icon.png"
+                            alt="sort">
                     </div>
                     <div style="display: flex;">
-                        <p>Surname</p>
-                        <img class="table_header_icon" src="./images/icons/sort-icon.png" alt="sort">
+                        <p id="surname_sorting">Surname</p>
+                        <img id="surname_sorting-icon" class="table_header_icon" src="./images/icons/sort-icon.png"
+                            alt="sort">
                     </div>
-                    <div>
-                        <p>House name</p>
+                    <div style="display: flex;">
+                        <p id="house_sorting">House name</p>
+                        <img id="name_sorting-icon" class="table_header_icon" src="./images/icons/sort-icon.png"
+                            alt="sort">
                     </div>
                     <div>
                         <p>Responsibility</p>
@@ -240,6 +381,18 @@
 
             </div>
         </section>
+
+        <section id="pop_up-wrapper" class="hidden">
+            <div id="pop_up-background"></div>
+
+            <div id="pop_up">
+                <div class="pop_up-gradient-top pop_up-gradient-top-Slytherin">
+                    <img class="pop_up-image" src="./images/students-images/abbott_h.png" alt="">
+                    <img class="pop_up-name-background" src="./images/pop_up-name_background.png" alt="">
+                </div>
+            </div>
+        </section>
+
     </main>
 
 
