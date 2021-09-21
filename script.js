@@ -75,6 +75,7 @@ function setup_filters_listeners() {
     
     
     // add event listeners for multiple options
+    // Solution with [...something] taken from StachOverflow title "Why is forEach not working for children?"
     let house_options = [...house_container.children] //to create a list with children elements
     house_options.forEach((container) => {
         container.addEventListener("click", click_filter_element.bind(null, container, "house"))
@@ -145,55 +146,44 @@ function filterData(column, values) {
 
 function reset_filter_data() {
     display_all_filters_as_unselected()
+    
+    // To CHANGE?
+    start()
 
-    currentFilters.house = []
-    currentFilters.status = []
-    currentFilters.responsibility = []
-    currentFilters.blood = []
+    // currentFilters.house = []
+    // currentFilters.status = []
+    // currentFilters.responsibility = []
+    // currentFilters.blood = []
+
 }
 
 function display_all_filters_as_unselected(){
     // looping throught currentFilters elements and making elements look unselected
 
-    // TO DO
-    // let house_options = [...house_container.children] //to create a list with children elements
-    // house_options.forEach((container) => {
-    //     // container.addEventListener("click", click_filter_element.bind(null, container, "house"))
-    // })
-
-
-
-
-
-    // currentFilters.house.forEach(unselectFilterItems)
-    // currentFilters.status.forEach(unselectFilterItems)
-    // currentFilters.responsibility.forEach(unselectFilterItems)
-    // currentFilters.blood.forEach(unselectFilterItems)
-
-    // // add event listeners for multiple options
-    // let house_options = [...house_container.children] //to create a list with children elements
-    // house_options.forEach((container) => {
-    //     container.addEventListener("click", click_filter_element.bind(null, container, "house"))
-    // })
-
-}
-
-function unselectFilterItems(item) {
-    console.log("ITEM ", item)
-    // zaznaczyc container i pojsc w dol zeby odnalezc elementy
-    // zrobic to z pomoca forEach x 2
-
-    // TO DO!!!
-
-    // const filterContainer = document.querySelector("#filter_by")
-    // const arrayCollections = []
-    // // ...
-    // arrayCollections.forEach(collection => {
-    //     // ...
-    // })
-
+    const filtersContainer = document.querySelector("#filter_by")
     
+    // Solution taken from StachOverflow title "Why is forEach not working for children?"
+    const filtersContainerChildren = [...filtersContainer.children]
+    filtersContainerChildren.forEach(collection => {
+        let collectionClasses = [...collection.classList]
+        if (collectionClasses.includes("filter-collection_elements")) {
+            const collectionChildren = [...collection.children]
+            collectionChildren.forEach(element => {
+                cleanFilterViewSelection(element)
+            })
+        }
+    })
 }
+
+function cleanFilterViewSelection(selectedElement) {
+    console.log("SELECTED ELEMENT ", selectedElement)
+    const eachFilterOptionContainer = selectedElement.children[0]
+    console.log("CHILD ELEMENT ", eachFilterOptionContainer)
+    eachFilterOptionContainer.classList.remove("li_item-active")
+    eachFilterOptionContainer.children[0].classList.remove("circle_active")
+    eachFilterOptionContainer.children[0].classList.add("circle_inactive")
+}
+
 
 function setup_reset_button_listener() {
     const resetButton = document.querySelector("#reset_button")
