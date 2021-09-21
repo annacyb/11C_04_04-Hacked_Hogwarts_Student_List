@@ -67,6 +67,7 @@ function setEventListeners() {
 }
 
 function setup_filters_listeners() {
+
     const container_filters = document.getElementById("filter_by")
 
     const house_container = container_filters.getElementsByClassName("filter-collection_elements")[0]
@@ -105,6 +106,10 @@ function setup_search_listener(){
 }
 
  function click_filter_element(filter_button, type) {
+     // reset search input
+    let searchInput = document.querySelector("#search_name")
+    searchInput.value = ``
+
     console.log("BUTTON", filter_button, "TYPE ", type)
     toggle_click(filter_button.children[0])
 
@@ -139,7 +144,15 @@ function setup_search_listener(){
 }
 
 function searchStudent(){
+    // reset filters and students data
+    display_all_filters_as_unselected()
+    currentFilters.house = []
+    currentFilters.status = []
+    currentFilters.responsibility = []
+    currentFilters.blood = []
     loadJSON()
+
+
     let searchInput = document.querySelector("#search_name").value.toLowerCase()
     console.log("INPUT", searchInput)
     
