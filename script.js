@@ -62,6 +62,7 @@ function setEventListeners() {
     // event listeners on: sort icons, filter items, buttons, table elements
     setup_filters_listeners()
     setup_reset_button_listener()
+    // setup_students_details_listener()
 }
 
 function setup_filters_listeners() {
