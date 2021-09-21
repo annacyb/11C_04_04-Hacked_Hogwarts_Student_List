@@ -34,9 +34,14 @@ const statsStudents = {
     }
 }
 
-let filterBy = {
+const filterBy = {
     column: '',
     value: ''
+}
+
+const sortBy = {
+    column: 'firstName',
+    order: 'asc'  // asc - ascending (A-Z), desc - descending (Z-A)
 }
 
 // creating object prototype
@@ -55,15 +60,29 @@ const Student = {
 function start() {
     setEventListeners()
     loadJSON()
+    // hack to wait for loadJSON to finish fetching data
+    setTimeout(sort, 999)
     setTimeout(displayList, 1000)
 }
 
+// Event Listeners
+
 function setEventListeners() {
     // event listeners on: sort icons, filter items, buttons, table elements
-    setup_filters_listeners()
+    setup_sort_listeners()
     setup_search_listener()
+    setup_filters_listeners()
     setup_reset_button_listener()
     // setup_students_details_listener()
+}
+
+function setup_sort_listeners() {
+    const sortName = document.querySelector("#sort_by-name")
+    const sortLastname = document.querySelector("#sort_by-lastname")
+    const sortHouseName = document.querySelector("#sort_by-house_name")
+    sortName.addEventListener("click", changeSorting.bind(null, "firstName"))
+    sortLastname.addEventListener("click", changeSorting.bind(null, "lastName"))
+    sortHouseName.addEventListener("click", changeSorting.bind(null, "house"))
 }
 
 function setup_filters_listeners() {
@@ -101,16 +120,90 @@ function setup_filters_listeners() {
 
 }
 
-function setup_search_listener(){
+function setup_search_listener() {
     document.querySelector("#search_name").addEventListener("input", searchStudent)
 }
 
- function click_filter_element(filter_button, type) {
+function setup_reset_button_listener() {
+    const resetButton = document.querySelector("#reset_button")
+    resetButton.addEventListener("click", reset_filter_data)
+}
+
+// Data modification functions 
+
+function changeSorting(value) {
+    // change global variable
+    sortBy.column = value
+    if (sortBy.order == 'asc') {
+        sortBy.order = 'desc'
+    } else {
+        sortBy.order = 'asc'
+    }
+    sort()
+    displayList()
+}
+
+function sort() {
+    // sort data
+    function CompareNames(a, b) {
+        // this part reverses comparison (it's enough to change signs of return)
+        let ordering = -1
+        if (sortBy.order == 'desc') {
+            ordering = 1
+        }
+        // this part just sorts :)
+        if(a[sortBy.column] < b[sortBy.column]) {
+            return ordering
+        }
+        else if (a[sortBy.column] === b[sortBy.column]) {
+            if (a.type < b.type) {
+                return ordering
+            }
+        }
+        else {
+            return ordering * -1
+        }
+    }
+    allStudents.sort(CompareNames)
+}
+
+function searchStudent() {
+    // reset filters and students data
+    display_all_filters_as_unselected()
+    currentFilters.house = []
+    currentFilters.status = []
+    currentFilters.responsibility = []
+    currentFilters.blood = []
+    loadJSON()
+
+
+    let searchInput = document.querySelector("#search_name").value.toLowerCase()
+    
+    let found = []
+    allStudents.forEach(student => {
+        let name = student.firstName.toLowerCase()
+        let last = student.lastName.toLowerCase()
+        let middle = student.middleName.toLowerCase()
+
+        let a = name.includes(searchInput)
+        let b = last.includes(searchInput)
+        let c = middle.includes(searchInput)
+
+        if(a || b || c){
+            found.push(student)
+        }
+
+    })
+
+    allStudents = found
+    displayList()
+}
+
+function click_filter_element(filter_button, type) {
      // reset search input
     let searchInput = document.querySelector("#search_name")
     searchInput.value = ``
 
-    console.log("BUTTON", filter_button, "TYPE ", type)
     toggle_click(filter_button.children[0])
 
     // save (ONE) selected filter element
@@ -135,46 +228,11 @@ function setup_search_listener(){
 
     // changeFiltering(type, selectedElementsName)
 
-    // sort()
+    sort()
 
     resetStats()
     prepareStats()
     showStats()
-    displayList()
-}
-
-function searchStudent(){
-    // reset filters and students data
-    display_all_filters_as_unselected()
-    currentFilters.house = []
-    currentFilters.status = []
-    currentFilters.responsibility = []
-    currentFilters.blood = []
-    loadJSON()
-
-
-    let searchInput = document.querySelector("#search_name").value.toLowerCase()
-    console.log("INPUT", searchInput)
-    
-    let found = []
-    allStudents.forEach(student => {
-        let name = student.firstName.toLowerCase()
-        console.log("NAME ", name)
-        let last = student.lastName.toLowerCase()
-        let middle = student.middleName.toLowerCase()
-
-        let a = name.includes(searchInput)
-        let b = last.includes(searchInput)
-        let c = middle.includes(searchInput)
-
-        if(a || b || c){
-            console.log("Wchodzi")
-            found.push(student)
-        }
-    })
-
-    allStudents = found
-    console.log("All students ", allStudents)
     displayList()
 }
 
@@ -187,7 +245,6 @@ function filterData(column, values) {
         })
     }
 }
-
 
 function reset_filter_data() {
     display_all_filters_as_unselected()
@@ -202,38 +259,7 @@ function reset_filter_data() {
 
 }
 
-function display_all_filters_as_unselected(){
-    // looping throught currentFilters elements and making elements look unselected
-
-    const filtersContainer = document.querySelector("#filter_by")
-    
-    // Solution taken from StachOverflow title "Why is forEach not working for children?"
-    const filtersContainerChildren = [...filtersContainer.children]
-    filtersContainerChildren.forEach(collection => {
-        let collectionClasses = [...collection.classList]
-        if (collectionClasses.includes("filter-collection_elements")) {
-            const collectionChildren = [...collection.children]
-            collectionChildren.forEach(element => {
-                cleanFilterViewSelection(element)
-            })
-        }
-    })
-}
-
-function cleanFilterViewSelection(selectedElement) {
-    console.log("SELECTED ELEMENT ", selectedElement)
-    const eachFilterOptionContainer = selectedElement.children[0]
-    console.log("CHILD ELEMENT ", eachFilterOptionContainer)
-    eachFilterOptionContainer.classList.remove("li_item-active")
-    eachFilterOptionContainer.children[0].classList.remove("circle_active")
-    eachFilterOptionContainer.children[0].classList.add("circle_inactive")
-}
-
-
-function setup_reset_button_listener() {
-    const resetButton = document.querySelector("#reset_button")
-    resetButton.addEventListener("click", reset_filter_data)
-}
+// Data loading functions
 
 function loadJSON() {
     fetch("https://petlatkea.dk/2021/hogwarts/students.json")
@@ -249,7 +275,7 @@ function loadJSON() {
         })
 }
 
-function prepareObjects( jsonData ) {
+function prepareObjects(jsonData) {
     jsonData.forEach( jsonObject => {
         
         // creating an object from the prototype
@@ -285,7 +311,6 @@ function prepareObjects( jsonData ) {
         student.gender = makeFirstLetterUppercase(jsonObject.gender)
 
         allStudents.push(student)
-        // console.log(student)
     })
 }
 
@@ -362,7 +387,6 @@ function getNickName(input) {
     return nickName
 }
 
-
 function getProfileImage(firstName, lastName) {
     let imageFilename
     // checks exeption of naming - for Parvati and Padma Patil 
@@ -376,7 +400,9 @@ function getProfileImage(firstName, lastName) {
     return imagePath
 }
 
-function resetStats(){
+// Stats functions
+
+function resetStats() {
     statsStudents.house.Gryffindor = 0
     statsStudents.house.Slytherin = 0
     statsStudents.house.Hufflepuff = 0
@@ -411,8 +437,7 @@ function countStatsForFilters(student, category, filter) {
     }
 }
 
-
-// VIEW
+// View functions
 
 function displayList() {
     // clear the list
@@ -450,8 +475,10 @@ function displayStudents( student ) {
     document.querySelector("#students_list").appendChild( clone )
 }
 
-
 function showStats() {
+    // reset number displayed
+    document.querySelector("#students_found").textContent = "Students found: "
+
     // display number of students in list
     document.querySelector("#students_found").textContent = "Students found: " + allStudents.length
     
@@ -463,7 +490,6 @@ function showStats() {
 
     // TO DO MORE FILTERS
 }
-
 
 function toggle_click(button) {
 
@@ -477,4 +503,29 @@ function toggle_click(button) {
         button.children[0].classList.add("circle_inactive")
         button.classList.remove("li_item-active")
     }
+}
+
+function display_all_filters_as_unselected() {
+    // looping throught currentFilters elements and making elements look unselected
+
+    const filtersContainer = document.querySelector("#filter_by")
+    
+    // Solution taken from StachOverflow title "Why is forEach not working for children?"
+    const filtersContainerChildren = [...filtersContainer.children]
+    filtersContainerChildren.forEach(collection => {
+        let collectionClasses = [...collection.classList]
+        if (collectionClasses.includes("filter-collection_elements")) {
+            const collectionChildren = [...collection.children]
+            collectionChildren.forEach(element => {
+                cleanFilterViewSelection(element)
+            })
+        }
+    })
+}
+
+function cleanFilterViewSelection(selectedElement) {
+    const eachFilterOptionContainer = selectedElement.children[0]
+    eachFilterOptionContainer.classList.remove("li_item-active")
+    eachFilterOptionContainer.children[0].classList.remove("circle_active")
+    eachFilterOptionContainer.children[0].classList.add("circle_inactive")
 }
