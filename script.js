@@ -41,7 +41,8 @@ const filterBy = {
 
 const sortBy = {
     column: 'firstName',
-    order: 'asc'  // asc - ascending (A-Z), desc - descending (Z-A)
+    order: 'asc',  // asc - ascending (A-Z), desc - descending (Z-A)
+    previousSortColumn: ''
 }
 
 // creating object prototype
@@ -60,9 +61,8 @@ const Student = {
 async function start() {
     setEventListeners()
     await loadJSON()
-    // hack to wait for loadJSON to finish fetching data
-    setTimeout(sort, 999)
-    setTimeout(displayList, 1000)
+    sort()
+    displayList()
 }
 
 // Event Listeners
@@ -77,9 +77,10 @@ function setEventListeners() {
 }
 
 function setup_sort_listeners() {
-    const sortName = document.querySelector("#sort_by-name")
-    const sortLastname = document.querySelector("#sort_by-lastname")
-    const sortHouseName = document.querySelector("#sort_by-house_name")
+    const sortName = document.querySelector("#sort_by-firstName")
+    const sortLastname = document.querySelector("#sort_by-lastName")
+    const sortHouseName = document.querySelector("#sort_by-house")
+
     sortName.addEventListener("click", changeSorting.bind(null, "firstName"))
     sortLastname.addEventListener("click", changeSorting.bind(null, "lastName"))
     sortHouseName.addEventListener("click", changeSorting.bind(null, "house"))
@@ -131,13 +132,18 @@ function setup_reset_button_listener() {
 
 // Data modification functions 
 
-function changeSorting(value) {
+function changeSorting(column) {
+    // saving previous sorting column for changing design of it
+    sortBy.column = sortBy.previousSortColumn
     // change global variable
-    sortBy.column = value
+    sortBy.column = column
     if (sortBy.order == 'asc') {
         sortBy.order = 'desc'
+        // DODAC ZMIENIANIE SORTING ICONS
+        changeDisplaySorting(column, "desc")
     } else {
         sortBy.order = 'asc'
+        changeDisplaySorting(column, "asc")
     }
     sort()
     displayList()
@@ -281,7 +287,6 @@ async function loadJSON() {
             resetStats()
             prepareStats()
             showStats()
-            console.log('load Finish')
         })
 }
 
@@ -538,4 +543,48 @@ function cleanFilterViewSelection(selectedElement) {
     eachFilterOptionContainer.classList.remove("li_item-active")
     eachFilterOptionContainer.children[0].classList.remove("circle_active")
     eachFilterOptionContainer.children[0].classList.add("circle_inactive")
+}
+
+function changeDisplaySorting(column, order) {
+    console.log(order)
+    const textHeader = document.querySelector(`#sort_by-${column}`).getElementsByTagName("p")[0]
+    // const previousTextHeader = document.querySelector(`#sort_by-${previousSortColumn}`).getElementsByTagName("p")[0]
+    if (order == "asc") {
+        // changing display of previous sort
+
+        // document.querySelector(`#sort_by-${previousSortColumn}`).lastElementChild.src = "./images/icons/sort-icon.png"
+        // previousTextHeader.remove("text-active_sorting")
+
+
+        // changing display of current sort
+        document.querySelector(`#sort_by-${column}`).lastElementChild.src = "./images/icons/sort-icon-asc.png"
+        textHeader.classList.remove("text-active_sorting")
+        textHeader.classList.add("text-active_sorting")
+
+        console.log("Sort by ", sortBy)
+        console.log("Sort by PO ", sortBy)
+    }
+    else if (order == "desc") {
+        // changing display of previous sort
+
+        // document.querySelector(`#sort_by-${previousSortColumn}`).lastElementChild.src = "./images/icons/sort-icon.png"
+        // previousTextHeader.remove("text-active_sorting")
+
+
+        // changing display of current sort
+        document.querySelector(`#sort_by-${column}`).lastElementChild.src = "./images/icons/sort-icon-desc.png"
+        textHeader.classList.remove("text-active_sorting")
+        textHeader.classList.add("text-active_sorting")
+        console.log("Sort by ", sortBy)
+        console.log("Sort by PO ", sortBy)
+    }
+    else {
+        // DWIE STRZALKI
+        document.querySelector(`#sort_by-${column}`).lastElementChild.src = "./images/icons/sort-icon.png"
+        textHeader.classList.remove("text-active_sorting")
+        console.log("Sort by ", sortBy)
+        console.log("COS3")
+    }
+    sort()
+    displayList()
 }

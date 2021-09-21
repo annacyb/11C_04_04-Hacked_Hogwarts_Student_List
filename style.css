@@ -370,6 +370,10 @@ li {
     cursor: pointer;
 }
 
+.text-active_sorting {
+    color: #A64000;
+}
+
 
 
 
