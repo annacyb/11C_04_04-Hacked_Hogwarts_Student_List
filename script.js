@@ -57,9 +57,9 @@ const Student = {
     status: "x"
 }
 
-function start() {
+async function start() {
     setEventListeners()
-    loadJSON()
+    await loadJSON()
     // hack to wait for loadJSON to finish fetching data
     setTimeout(sort, 999)
     setTimeout(displayList, 1000)
@@ -144,6 +144,7 @@ function changeSorting(value) {
 }
 
 function sort() {
+    console.log('sort')
     // sort data
     function CompareNames(a, b) {
         // this part reverses comparison (it's enough to change signs of return)
@@ -167,14 +168,16 @@ function sort() {
     allStudents.sort(CompareNames)
 }
 
-function searchStudent() {
+async function searchStudent() {
+    console.log('search')
     // reset filters and students data
-    display_all_filters_as_unselected()
-    currentFilters.house = []
-    currentFilters.status = []
-    currentFilters.responsibility = []
-    currentFilters.blood = []
-    loadJSON()
+    await loadJSON()
+
+    // apply filters
+    filterData("house", currentFilters.house)
+    filterData("status", currentFilters.status)
+    filterData("responsibility", currentFilters.responsibility)
+    filterData("blood", currentFilters.blood)
 
 
     let searchInput = document.querySelector("#search_name").value.toLowerCase()
@@ -196,11 +199,16 @@ function searchStudent() {
     })
 
     allStudents = found
+    sort()
+    resetStats()
+    prepareStats()
+    showStats()
     displayList()
 }
 
-function click_filter_element(filter_button, type) {
+async function click_filter_element(filter_button, type) {
      // reset search input
+     console.log('filter')
     let searchInput = document.querySelector("#search_name")
     searchInput.value = ``
 
@@ -220,7 +228,8 @@ function click_filter_element(filter_button, type) {
     }
     
     // Run filter on (ALL) selected filters
-    loadJSON()
+    await loadJSON()
+
     filterData("house", currentFilters.house)
     filterData("status", currentFilters.status)
     filterData("responsibility", currentFilters.responsibility)
@@ -229,7 +238,6 @@ function click_filter_element(filter_button, type) {
     // changeFiltering(type, selectedElementsName)
 
     sort()
-
     resetStats()
     prepareStats()
     showStats()
@@ -246,23 +254,24 @@ function filterData(column, values) {
     }
 }
 
-function reset_filter_data() {
+async function reset_filter_data() {
+    console.log('reset')
     display_all_filters_as_unselected()
     
-    // To CHANGE?
-    start()
+    currentFilters.house = []
+    currentFilters.status = []
+    currentFilters.responsibility = []
+    currentFilters.blood = []
 
-    // currentFilters.house = []
-    // currentFilters.status = []
-    // currentFilters.responsibility = []
-    // currentFilters.blood = []
-
+    await loadJSON()
+    sort()
+    displayList()
 }
 
 // Data loading functions
 
-function loadJSON() {
-    fetch("https://petlatkea.dk/2021/hogwarts/students.json")
+async function loadJSON() {
+    await fetch("https://petlatkea.dk/2021/hogwarts/students.json")
         .then( response => response.json() )
         .then( jsonData => {
             //
@@ -272,6 +281,7 @@ function loadJSON() {
             resetStats()
             prepareStats()
             showStats()
+            console.log('load Finish')
         })
 }
 
@@ -447,7 +457,7 @@ function displayList() {
     allStudents.forEach( displayStudents )
 }
 
-function displayStudents( student ) {
+function displayStudents(student) {
     // create clone
     const clone = document.querySelector("template.student_list-element").content.cloneNode(true)
     
