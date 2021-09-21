@@ -61,6 +61,7 @@ function start() {
 function setEventListeners() {
     // event listeners on: sort icons, filter items, buttons, table elements
     setup_filters_listeners()
+    setup_search_listener()
     setup_reset_button_listener()
     // setup_students_details_listener()
 }
@@ -99,6 +100,10 @@ function setup_filters_listeners() {
 
 }
 
+function setup_search_listener(){
+    document.querySelector("#search_name").addEventListener("input", searchStudent)
+}
+
  function click_filter_element(filter_button, type) {
     console.log("BUTTON", filter_button, "TYPE ", type)
     toggle_click(filter_button.children[0])
@@ -130,6 +135,33 @@ function setup_filters_listeners() {
     resetStats()
     prepareStats()
     showStats()
+    displayList()
+}
+
+function searchStudent(){
+    loadJSON()
+    let searchInput = document.querySelector("#search_name").value.toLowerCase()
+    console.log("INPUT", searchInput)
+    
+    let found = []
+    allStudents.forEach(student => {
+        let name = student.firstName.toLowerCase()
+        console.log("NAME ", name)
+        let last = student.lastName.toLowerCase()
+        let middle = student.middleName.toLowerCase()
+
+        let a = name.includes(searchInput)
+        let b = last.includes(searchInput)
+        let c = middle.includes(searchInput)
+
+        if(a || b || c){
+            console.log("Wchodzi")
+            found.push(student)
+        }
+    })
+
+    allStudents = found
+    console.log("All students ", allStudents)
     displayList()
 }
 
