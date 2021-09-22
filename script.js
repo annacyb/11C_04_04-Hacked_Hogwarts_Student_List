@@ -47,22 +47,23 @@ const sortBy = {
 
 // creating object prototype
 const Student = {
-    firstName: "x",
-    lastName: "x",
-    middleName: "x",
-    nickName: "x",
-    imageFilename: "x",
-    house: "x",
-    houseColor: "",
-    gender: "x",
-    status: "x"
+    firstName: "-",
+    lastName: "-",
+    middleName: "-",
+    nickName: "-",
+    imageFilename: "-",
+    house: "-",
+    houseColor: "-",
+    gender: "-",
+    status: "-",
+    blood: "-"
 }
 
 async function start() {
-    setEventListeners()
     await loadJSON()
     sort()
     displayList()
+    setEventListeners()
 }
 
 // Event Listeners
@@ -73,7 +74,8 @@ function setEventListeners() {
     setup_search_listener()
     setup_filters_listeners()
     setup_reset_button_listener()
-    // setup_students_details_listener()
+    // event listener for students' details is in displayList function as it changes dynamically
+    setup_pop_up_back_button_listener()
 }
 
 function setup_sort_listeners() {
@@ -128,6 +130,17 @@ function setup_search_listener() {
 function setup_reset_button_listener() {
     const resetButton = document.querySelector("#reset_button")
     resetButton.addEventListener("click", reset_filter_data)
+}
+
+function setup_pop_up_back_button_listener(){
+    document.querySelector(".pop_up-button-back").addEventListener("click", function() {
+        document.querySelector("#pop_up-wrapper").classList.add("hidden")
+        // removing top gradient class of pop up
+        const gradientElement = document.querySelector("#pop_up-wrapper").children[1].children[0]
+        console.log(gradientElement)
+        gradientElement.className = ''
+        gradientElement.classList.add("pop_up-gradient-top")
+    })
 }
 
 // Data modification functions 
@@ -271,6 +284,45 @@ async function reset_filter_data() {
     await loadJSON()
     sort()
     displayList()
+}
+
+function changeDetailsForPopUp(student) {
+    console.log("JEJ", student)
+
+   // change data, change colors for pop up details
+   document.querySelector(".pop_up-image").src = student.imageFilename
+
+   const popUpElement = document.querySelector("#pop_up-wrapper")
+   document.querySelector("#pop_up-main-name").textContent = student.firstName + " " + student.middleName + " " + student.lastName
+   document.querySelector("#pop_up-value-name").textContent = student.firstName
+
+   document.querySelector("#pop_up-value-middlename").textContent = student.middleName
+   if(student.middleName.length == 0){
+    document.querySelector("#pop_up-value-middlename").textContent = "-"
+   }
+
+   document.querySelector("#pop_up-value-nickname").textContent = student.nickName
+   if(student.middleName.length == 0){
+    document.querySelector("#pop_up-value-nickname").textContent = "-"
+   }
+   
+   document.querySelector("#pop_up-value-surname").textContent = student.lastName
+   document.querySelector("#pop_up-value-gender").textContent = student.gender
+   document.querySelector("#pop_up-value-blood").textContent = student.blood
+   document.querySelector("#pop_up-value-status").textContent = student.status
+
+   document.querySelector("#pop_up-value-house").textContent = student.house
+
+   document.querySelector("#pop_up-house-symbol").src = `./images/houses/hogwarts-house-${student.house}2.png`
+
+   // for changing gradient at the top of pop up
+   document.querySelector("#pop_up").children[0].classList.add(`pop_up-gradient-top-${student.house}`)
+
+   // TO DO - CHANGING RESPONSIBILITIES
+   // TO DO - CHANGING BUTTONS
+   
+   // unhide pop up
+   popUpElement.classList.remove("hidden")
 }
 
 // Data loading functions
@@ -486,7 +538,12 @@ function displayStudents(student) {
     // clone.querySelector("[data-field=gender]").textContent = student.gender
 
     // append clone to list
-    document.querySelector("#students_list").appendChild( clone )
+    document.querySelector("#students_list").appendChild(clone)
+
+    // add event listener
+    let AllStudentsDivs = [...document.querySelector("#students_list").children]
+    let LastStudentDiv = AllStudentsDivs.pop()  // last element of list is my current "clone"
+    LastStudentDiv.addEventListener("click", changeDetailsForPopUp.bind(null, student))
 }
 
 function showStats() {

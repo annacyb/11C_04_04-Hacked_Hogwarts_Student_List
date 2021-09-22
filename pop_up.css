@@ -10,7 +10,7 @@
 
 #pop_up {
     position: fixed;
-    top: 15vh;
+    top: 10vh;
     left: 35vw;
     height: 785px;
     width: 580px;
@@ -116,6 +116,14 @@
     padding-bottom: 4px;
     letter-spacing: 0.5px;
 
+}
+
+#pop_up-values {
+    width: 135px;
+}
+
+#pop_up-values > p {
+    min-height: 24.5px;
 }
 
 #pop_up-headers > p {
