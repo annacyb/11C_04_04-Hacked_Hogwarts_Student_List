@@ -42,7 +42,7 @@ const filterBy = {
 const sortBy = {
     column: 'firstName',
     order: 'asc',  // asc - ascending (A-Z), desc - descending (Z-A)
-    previousSortColumn: ''
+    previousSortColumn: 'firstName'
 }
 
 // creating object prototype
@@ -139,7 +139,6 @@ function changeSorting(column) {
     sortBy.column = column
     if (sortBy.order == 'asc') {
         sortBy.order = 'desc'
-        // DODAC ZMIENIANIE SORTING ICONS
         changeDisplaySorting(column, "desc")
     } else {
         sortBy.order = 'asc'
@@ -547,43 +546,34 @@ function cleanFilterViewSelection(selectedElement) {
 
 function changeDisplaySorting(column, order) {
     console.log(order)
+
+    // change display of previous sort header elements
+    const previousTextHeader = document.querySelector(`#sort_by-${sortBy.previousSortColumn}`).getElementsByTagName("p")[0]
+    previousTextHeader.classList.remove("text-active_sorting")
+    document.querySelector(`#sort_by-${sortBy.previousSortColumn}`).lastElementChild.src = "./images/icons/sort-icon.png"
+
+    // change display of current sort header elements
     const textHeader = document.querySelector(`#sort_by-${column}`).getElementsByTagName("p")[0]
-    // const previousTextHeader = document.querySelector(`#sort_by-${previousSortColumn}`).getElementsByTagName("p")[0]
+    console.log("Previous", previousTextHeader)
+
     if (order == "asc") {
-        // changing display of previous sort
-
-        // document.querySelector(`#sort_by-${previousSortColumn}`).lastElementChild.src = "./images/icons/sort-icon.png"
-        // previousTextHeader.remove("text-active_sorting")
-
-
-        // changing display of current sort
         document.querySelector(`#sort_by-${column}`).lastElementChild.src = "./images/icons/sort-icon-asc.png"
         textHeader.classList.remove("text-active_sorting")
         textHeader.classList.add("text-active_sorting")
 
-        console.log("Sort by ", sortBy)
-        console.log("Sort by PO ", sortBy)
+        // changng values in global sortBy object
+        sortBy.previousSortColumn = column
     }
     else if (order == "desc") {
-        // changing display of previous sort
-
-        // document.querySelector(`#sort_by-${previousSortColumn}`).lastElementChild.src = "./images/icons/sort-icon.png"
-        // previousTextHeader.remove("text-active_sorting")
-
-
-        // changing display of current sort
         document.querySelector(`#sort_by-${column}`).lastElementChild.src = "./images/icons/sort-icon-desc.png"
         textHeader.classList.remove("text-active_sorting")
         textHeader.classList.add("text-active_sorting")
-        console.log("Sort by ", sortBy)
-        console.log("Sort by PO ", sortBy)
+    
+        // changng values in global sortBy object
+        sortBy.previousSortColumn = column
     }
     else {
-        // DWIE STRZALKI
-        document.querySelector(`#sort_by-${column}`).lastElementChild.src = "./images/icons/sort-icon.png"
-        textHeader.classList.remove("text-active_sorting")
-        console.log("Sort by ", sortBy)
-        console.log("COS3")
+        console.log("changingDisplaySorting - 3rd option")
     }
     sort()
     displayList()
