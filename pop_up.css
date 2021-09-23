@@ -153,6 +153,11 @@
     text-align-last: center;
 }
 
+.pop_up-no-responsibilities {
+    width: 300px !important;
+    opacity: 0.9;
+}
+
 
 .pop_up-responsibilities-icon {
     height: 40px;

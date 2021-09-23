@@ -321,7 +321,7 @@ li {
 
 #table_headers {
     display: grid;
-    grid-template-columns: 1.3fr 0.9fr 1fr 1.3fr 0.8fr 0.3fr;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr 0.3fr;
     grid-template-rows: 100%;
     grid-column-gap: 15px;
     grid-row-gap: 0px;
@@ -380,7 +380,7 @@ li {
 /* table elements */
 .table_element {
     display: grid;
-    grid-template-columns: 1.3fr 0.9fr 1fr 1.3fr 0.8fr 0.3fr;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr 0.3fr;
     grid-template-rows: 100%;
     grid-column-gap: 15px;
     grid-row-gap: 0px;
@@ -463,7 +463,7 @@ li {
     height: 30px;
     width: auto;
     padding-right: 10px;
-    opacity: 0.9;
+    opacity: 0.8;
 }
 
 .icon-active_or_expelled-element-size {
