@@ -205,6 +205,7 @@
     padding-right: 15px;
 
     opacity: 0.9;
+    cursor: pointer;
 }
 
 .pop_up-button:hover {
@@ -221,7 +222,7 @@
     padding-right: 5px;
 }
 
-.pop_up-button-expel {
+.pop_up-button-expel-active {
     width: auto;
     height: 44px;
     margin-top: 20px;
@@ -244,10 +245,44 @@
 
     padding-left: 5px;
     padding-right: 15px;
+    cursor: pointer;
 }
 
-.pop_up-button-expel > span {
+.pop_up-button-expel-active:hover {
+    background-color: #9f402e;
+}
+
+.pop_up-button-expel-active > span {
     padding-right: 5px;
     color: #FAF6F1;
 }
 
+.pop_up-button-expel-inactive {
+    width: auto;
+    height: 44px;
+    margin-top: 20px;
+    border: 0px;
+    border-radius: 10px;
+    margin-left: 8px;
+    background-color: #525252;
+    box-shadow: 0px 3px 10px 0px rgb(0 0 0 / 20%);
+    font-size: 0.9em;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+    font-family: 'El Messiri', sans-serif;
+    color: rgb(26,43,67);
+
+    align-items: center;
+    display: flex;
+    min-width: 90px;
+
+    white-space: nowrap;
+
+    padding-left: 5px;
+    padding-right: 15px;
+}
+
+.pop_up-button-expel-inactive > span {
+    padding-right: 5px;
+    color: #FAF6F1;
+}

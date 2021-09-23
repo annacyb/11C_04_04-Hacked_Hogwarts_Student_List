@@ -55,8 +55,12 @@ const Student = {
     house: "-",
     houseColor: "-",
     gender: "-",
-    status: "Active",
-    blood: "-"
+    // status: "Active",
+    blood: "-",
+    expelled: false,
+    Prefect: false,
+    Squad: false,
+    id: 0
 }
 
 async function start() {
@@ -137,7 +141,6 @@ function setup_pop_up_back_button_listener(){
         document.querySelector("#pop_up-wrapper").classList.add("hidden")
         // removing top gradient class of pop up
         const gradientElement = document.querySelector("#pop_up-wrapper").children[1].children[0]
-        console.log(gradientElement)
         gradientElement.className = ''
         gradientElement.classList.add("pop_up-gradient-top")
     })
@@ -162,7 +165,6 @@ function changeSorting(column) {
 }
 
 function sort() {
-    console.log('sort')
     // sort data
     function CompareNames(a, b) {
         // this part reverses comparison (it's enough to change signs of return)
@@ -187,7 +189,6 @@ function sort() {
 }
 
 async function searchStudent() {
-    console.log('search')
     // reset filters and students data
     await loadJSON()
 
@@ -226,7 +227,6 @@ async function searchStudent() {
 
 async function click_filter_element(filter_button, type) {
      // reset search input
-     console.log('filter')
     let searchInput = document.querySelector("#search_name")
     searchInput.value = ``
 
@@ -235,8 +235,17 @@ async function click_filter_element(filter_button, type) {
     // save (ONE) selected filter element
     let type_name = filter_button.children[0].children[1].textContent
     const nameSplit = type_name.split(" ")
-    const selectedElementsName = nameSplit[0]
-    
+    let selectedElementsName = nameSplit[0]
+
+    // modify selectedName for status filter
+    if (selectedElementsName == 'Active') {
+        selectedElementsName = false  // set expelled to false
+    }
+    if (selectedElementsName == 'Expelled') {
+        selectedElementsName = true
+    }
+
+    // update filters
     if (currentFilters[type].includes(selectedElementsName)) {
         // removes selected filter's element name from the list if it already exist
         currentFilters[type] = currentFilters[type].filter(i => i !== selectedElementsName)
@@ -244,12 +253,11 @@ async function click_filter_element(filter_button, type) {
         // adds selected filter's element name to the list if it does not already exist
         currentFilters[type].push(selectedElementsName)
     }
-    
     // Run filter on (ALL) selected filters
     await loadJSON()
 
     filterData("house", currentFilters.house)
-    filterData("status", currentFilters.status)
+    filterData("expelled", currentFilters.status)
     filterData("responsibility", currentFilters.responsibility)
     filterData("blood", currentFilters.blood)
 
@@ -263,7 +271,7 @@ async function click_filter_element(filter_button, type) {
 }
 
 function filterData(column, values) {
-    if(values.length > 0) {
+    if (values.length > 0) {
         allStudents = allStudents.filter(student => {
             // values - selected filters
             // student[column] - student's one value from category from filters
@@ -273,7 +281,6 @@ function filterData(column, values) {
 }
 
 async function reset_filter_data() {
-    console.log('reset')
     display_all_filters_as_unselected()
     
     currentFilters.house = []
@@ -290,6 +297,9 @@ function changeDetailsForPopUp(student) {
 
    // change data, change colors for pop up details
    document.querySelector(".pop_up-image").src = student.imageFilename
+   document.querySelector(".pop_up-image").addEventListener("error", () => {
+    document.querySelector(".pop_up-image").src = './images/no-photo.png'
+})
 
    const popUpElement = document.querySelector("#pop_up-wrapper")
    document.querySelector("#pop_up-main-name").textContent = student.firstName + " " + student.middleName + " " + student.lastName
@@ -308,7 +318,18 @@ function changeDetailsForPopUp(student) {
    document.querySelector("#pop_up-value-surname").textContent = student.lastName
    document.querySelector("#pop_up-value-gender").textContent = student.gender
    document.querySelector("#pop_up-value-blood").textContent = student.blood
-   document.querySelector("#pop_up-value-status").textContent = student.status
+
+   // status
+   if (student.expelled == false) {
+    document.querySelector("#pop_up-value-status").textContent = "Active"
+    document.querySelector("#button-expel").classList.remove("pop_up-button-expel-inactive")
+    document.querySelector("#button-expel").classList.add("pop_up-button-expel-active")
+   } else {
+    document.querySelector("#pop_up-value-status").textContent = "Expelled"
+    document.querySelector("#button-expel").classList.remove("pop_up-button-expel-active")
+    document.querySelector("#button-expel").classList.add("pop_up-button-expel-inactive")
+   }
+   //
 
    document.querySelector("#pop_up-value-house").textContent = student.house
 
@@ -318,7 +339,22 @@ function changeDetailsForPopUp(student) {
    document.querySelector("#pop_up").children[0].classList.add(`pop_up-gradient-top-${student.house}`)
 
    // TO DO - CHANGING RESPONSIBILITIES
+
+
    // TO DO - CHANGING BUTTONS
+
+   // Expel button
+   // remove event listeners
+
+   // add event listeners on buttons
+   // NEW NEW
+//    console.log("TRULU ", student.expelled)
+//    if (student.expelled == false)
+//    document.querySelector("#button-expel").addEventListener("click", () => {
+//         student.expelled == true
+//         console.log(student.expelled)
+// })
+
    
    // unhide pop up
    popUpElement.classList.remove("hidden")
@@ -379,8 +415,21 @@ function prepareObjects(jsonData, jsonDataBlood) {
         student.houseColor = createHouseColor(student.house)
         student.gender = makeFirstLetterUppercase(jsonObject.gender)
 
+        // add random ID (student identifier)
+        student.id = Math.round(Math.random() * 10000)
+
         // for setting student.blood
         setBloodStatus(jsonDataBlood, student)
+
+        // As default for all students expelled == false
+        student.expelled = Student.expelled
+
+        // expelling one of the students
+        if (student.firstName.includes("Leanne")){
+            student.expelled = true
+        }
+        
+        // TO DO RESPONSIBILITY
 
         allStudents.push(student)
     })
@@ -477,7 +526,12 @@ function setBloodStatus(jsonDataBlood, student){
           student.blood = "Half"
         } else if (jsonDataBlood.pure.includes(student.lastName)) {
           student.blood = "Pure"
-        } else {
+        }
+        // addittional rule so that there will be no Mud-bloods in Slytherin
+        else if (student.house == "Slytherin") {
+            student.blood = "Half"
+        }
+        else {
           student.blood = "Mud"
         }
 }
@@ -509,6 +563,8 @@ function prepareStats() {
         countStatsForFilters(student, "house", "Hufflepuff")
         countStatsForFilters(student, "house", "Ravenclaw")
 
+        countStatsForFilters(student, "expelled", student.expelled)
+
         countStatsForFilters(student, "blood", "Pure")
         countStatsForFilters(student, "blood", "Half")
         countStatsForFilters(student, "blood", "Mud")
@@ -517,10 +573,22 @@ function prepareStats() {
 }
 
 function countStatsForFilters(student, category, filter) {
-    if (student[category] == filter) {
+    // for active or expelled students category
+    if ((category == "expelled") && (filter === false)) {
+        statsStudents.status.Active = statsStudents.status.Active + 1
+    }
+    else if ((category == "expelled") && (filter === true)) {
+        statsStudents.status.Expelled = statsStudents.status.Expelled + 1
+    }
+    // for all other categories
+    else if (student[category] == filter) {
         statsStudents[category][filter] = statsStudents[category][filter] + 1
     }
+    else {
+        console.log("Else in countStatsForFilters function")
+    }
 }
+
 
 // View functions
 
@@ -529,7 +597,10 @@ function displayList() {
     document.querySelector("#students_list").innerHTML = ""
 
     // build a new list
-    allStudents.forEach( displayStudents )
+    allStudents.forEach(displayStudents)
+
+    console.log("All students: ", allStudents)
+    console.log("Stats: ", statsStudents)
 }
 
 function displayStudents(student) {
@@ -551,7 +622,21 @@ function displayStudents(student) {
     clone.querySelector("p.student_house_name").textContent = student.house
 
     // TO DO - responsibility + icon
-    // TO DO - status active/expelled + icon
+
+
+    // Status changing active/expelled text, icon and style in list of students
+    const iconStatusTableElement = clone.querySelector("img.element-status")
+    if (student.expelled == false){
+        iconStatusTableElement.parentElement.parentElement.classList.remove("table_element-expelled")
+        iconStatusTableElement.src = "./images/icons/icon-active_student.png"
+        iconStatusTableElement.nextSibling.textContent = "Active"
+    } else {
+        iconStatusTableElement.src = "./images/icons/icon-expelled_student.png"
+        iconStatusTableElement.nextSibling.textContent = "Expelled"
+
+        // changing style of whole container with student's list info
+        iconStatusTableElement.parentElement.parentElement.classList.add("table_element-expelled")
+    }
 
     // clone.querySelector("[data-field=nickName]").textContent = student.nickName
     // clone.querySelector("[data-field=gender]").textContent = student.gender
@@ -559,10 +644,10 @@ function displayStudents(student) {
     // append clone to list
     document.querySelector("#students_list").appendChild(clone)
 
-    // add event listener
-    let AllStudentsDivs = [...document.querySelector("#students_list").children]
-    let LastStudentDiv = AllStudentsDivs.pop()  // last element of list is my current "clone"
-    LastStudentDiv.addEventListener("click", changeDetailsForPopUp.bind(null, student))
+    // add event listeners to every element in a list of students
+    let allStudentsDivs = [...document.querySelector("#students_list").children]
+    let lastStudentDiv = allStudentsDivs.pop()  // last element of list is my current "clone"
+    lastStudentDiv.addEventListener("click", changeDetailsForPopUp.bind(null, student))
 }
 
 function showStats() {
@@ -573,16 +658,25 @@ function showStats() {
     document.querySelector("#students_found").textContent = "Students found: " + allStudents.length
     
     // display numbers in filters
+
+    // Filter category - House name
     document.querySelector(".filter-Gryffindor li p").textContent = "Gryffindor (" + statsStudents.house.Gryffindor + ")"
     document.querySelector(".filter-Slytherin li p").textContent = "Slytherin (" + statsStudents.house.Slytherin + ")"
     document.querySelector(".filter-Hufflepuff li p").textContent = "Hufflepuff (" + statsStudents.house.Hufflepuff + ")"
     document.querySelector(".filter-Ravenclaw li p").textContent = "Ravenclaw (" + statsStudents.house.Ravenclaw + ")"
 
+    // Filter category - Status
+    document.querySelector(".filter-Active_students li p").textContent = "Active (" + statsStudents.status.Active + ")"
+    document.querySelector(".filter-Expelled_students li p").textContent = "Expelled (" + statsStudents.status.Expelled + ")"
+
+    // Filter category - Responsibility
+    // TO DO
+
+    // Filter category - Blood type
     document.querySelector(".filter-Pure-blood li p").textContent = "Pure (" + statsStudents.blood.Pure + ")"
     document.querySelector(".filter-Half-blood li p").textContent = "Half (" + statsStudents.blood.Half + ")"
     document.querySelector(".filter-Mud-blood li p").textContent = "Mud (" + statsStudents.blood.Mud + ")"
 
-    // TO DO MORE FILTERS
 }
 
 function toggle_click(button) {
@@ -625,8 +719,6 @@ function cleanFilterViewSelection(selectedElement) {
 }
 
 function changeDisplaySorting(column, order) {
-    console.log(order)
-
     // change display of previous sort header elements
     const previousTextHeader = document.querySelector(`#sort_by-${sortBy.previousSortColumn}`).getElementsByTagName("p")[0]
     previousTextHeader.classList.remove("text-active_sorting")
@@ -634,7 +726,6 @@ function changeDisplaySorting(column, order) {
 
     // change display of current sort header elements
     const textHeader = document.querySelector(`#sort_by-${column}`).getElementsByTagName("p")[0]
-    console.log("Previous", previousTextHeader)
 
     if (order == "asc") {
         document.querySelector(`#sort_by-${column}`).lastElementChild.src = "./images/icons/sort-icon-asc.png"
