@@ -3,7 +3,6 @@
 window.addEventListener("DOMContentLoaded", start)
 
 let allStudents = []
-let allBloodStatus = {}
 
 const currentFilters = {
     house: [],
@@ -346,9 +345,6 @@ async function loadJSON() {
 }
 
 function prepareObjects(jsonData, jsonDataBlood) {
-
-    allBloodStatus = jsonDataBlood
-
     jsonData.forEach( jsonObject => {
         
         // creating an object from the prototype
@@ -477,15 +473,13 @@ function getProfileImage(firstName, lastName) {
 }
 
 function setBloodStatus(jsonDataBlood, student){
-        console.log(student.lastName)
         if (jsonDataBlood.half.includes(student.lastName)) {
-          student.blood = "Half-blood"
+          student.blood = "Half"
         } else if (jsonDataBlood.pure.includes(student.lastName)) {
-          student.blood = "Pure-blood"
+          student.blood = "Pure"
         } else {
-          student.blood = "Muggleborn"
+          student.blood = "Mud"
         }
-      console.log(student)
 }
 
 // Stats functions
@@ -515,6 +509,9 @@ function prepareStats() {
         countStatsForFilters(student, "house", "Hufflepuff")
         countStatsForFilters(student, "house", "Ravenclaw")
 
+        countStatsForFilters(student, "blood", "Pure")
+        countStatsForFilters(student, "blood", "Half")
+        countStatsForFilters(student, "blood", "Mud")
         // TO DO MORE FILTERS NUMBERS
     })
 }
@@ -580,6 +577,10 @@ function showStats() {
     document.querySelector(".filter-Slytherin li p").textContent = "Slytherin (" + statsStudents.house.Slytherin + ")"
     document.querySelector(".filter-Hufflepuff li p").textContent = "Hufflepuff (" + statsStudents.house.Hufflepuff + ")"
     document.querySelector(".filter-Ravenclaw li p").textContent = "Ravenclaw (" + statsStudents.house.Ravenclaw + ")"
+
+    document.querySelector(".filter-Pure-blood li p").textContent = "Pure (" + statsStudents.blood.Pure + ")"
+    document.querySelector(".filter-Half-blood li p").textContent = "Half (" + statsStudents.blood.Half + ")"
+    document.querySelector(".filter-Mud-blood li p").textContent = "Mud (" + statsStudents.blood.Mud + ")"
 
     // TO DO MORE FILTERS
 }
