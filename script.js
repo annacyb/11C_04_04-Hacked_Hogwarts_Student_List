@@ -3,6 +3,7 @@
 window.addEventListener("DOMContentLoaded", start)
 
 let allStudents = []
+let allBloodStatus = {}
 
 const currentFilters = {
     house: [],
@@ -55,7 +56,7 @@ const Student = {
     house: "-",
     houseColor: "-",
     gender: "-",
-    status: "-",
+    status: "Active",
     blood: "-"
 }
 
@@ -287,7 +288,6 @@ async function reset_filter_data() {
 }
 
 function changeDetailsForPopUp(student) {
-    console.log("JEJ", student)
 
    // change data, change colors for pop up details
    document.querySelector(".pop_up-image").src = student.imageFilename
@@ -328,20 +328,27 @@ function changeDetailsForPopUp(student) {
 // Data loading functions
 
 async function loadJSON() {
-    await fetch("https://petlatkea.dk/2021/hogwarts/students.json")
-        .then( response => response.json() )
-        .then( jsonData => {
-            //
-            // when loaded, prepare objects and stats
-            allStudents = []
-            prepareObjects( jsonData )
-            resetStats()
-            prepareStats()
-            showStats()
-        })
+    
+    const response = await fetch("https://petlatkea.dk/2021/hogwarts/students.json")
+    const jsonData = await response.json()
+    const responseBlood = await fetch("https://petlatkea.dk/2021/hogwarts/families.json")
+    const jsonDataBlood = await responseBlood.json()
+  
+    // when loaded, prepare data objects
+    allStudents = []
+    prepareObjects(jsonData, jsonDataBlood)
+
+    //when loaded prepare stats with numbers of students
+    resetStats()
+    prepareStats()
+    showStats()
+
 }
 
-function prepareObjects(jsonData) {
+function prepareObjects(jsonData, jsonDataBlood) {
+
+    allBloodStatus = jsonDataBlood
+
     jsonData.forEach( jsonObject => {
         
         // creating an object from the prototype
@@ -375,6 +382,9 @@ function prepareObjects(jsonData) {
         student.house = makeFirstLetterUppercase(jsonObject.house)
         student.houseColor = createHouseColor(student.house)
         student.gender = makeFirstLetterUppercase(jsonObject.gender)
+
+        // for setting student.blood
+        setBloodStatus(jsonDataBlood, student)
 
         allStudents.push(student)
     })
@@ -464,6 +474,18 @@ function getProfileImage(firstName, lastName) {
     }
     let imagePath = `./images/students-images/${imageFilename}`
     return imagePath
+}
+
+function setBloodStatus(jsonDataBlood, student){
+        console.log(student.lastName)
+        if (jsonDataBlood.half.includes(student.lastName)) {
+          student.blood = "Half-blood"
+        } else if (jsonDataBlood.pure.includes(student.lastName)) {
+          student.blood = "Pure-blood"
+        } else {
+          student.blood = "Muggleborn"
+        }
+      console.log(student)
 }
 
 // Stats functions
