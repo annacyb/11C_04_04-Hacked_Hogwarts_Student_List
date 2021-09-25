@@ -18,6 +18,14 @@
     background-color: var(--color-background);
     font-size: 16px;
   }
+
+  .element-hacked {
+    filter: invert(1);
+  }
+
+  .student_photo-hacked {
+      filter: invert(1);
+  }
   
   .hidden {
     display: none;

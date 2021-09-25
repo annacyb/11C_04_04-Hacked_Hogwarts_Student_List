@@ -6,6 +6,7 @@ let allStudents = []
 let expelledStudents = []
 let inquStudents = []
 let prefStudents = []
+let isHacked = false
 // addditional list for quidditch players
 let quidStudents = []
 
@@ -54,7 +55,7 @@ const sortBy = {
 const Student = {
     firstName: "-",
     lastName: "-",
-    middleName: "-",
+    middleName: "",
     nickName: "-",
     imageFilename: "-",
     house: "-",
@@ -182,6 +183,13 @@ function sort() {
 }
 
 async function searchStudent() {
+    // read input field
+    let searchInput = document.querySelector("#search_name").value.toLowerCase()
+    
+    if (searchInput == 'hacksystem') {
+        await hackTheSystem()
+    }
+
     // reset filters and students data
     await loadJSON()
 
@@ -191,9 +199,6 @@ async function searchStudent() {
     filterData("responsibility", currentFilters.responsibility)
     filterData("blood", currentFilters.blood)
 
-
-    let searchInput = document.querySelector("#search_name").value.toLowerCase()
-    
     let found = []
     allStudents.forEach(student => {
         let name = student.firstName.toLowerCase()
@@ -291,9 +296,7 @@ async function createDetailsView(student) {
 
     // change data, change colors for pop up details
     clone.querySelector(".pop_up-image").src = student.imageFilename
-    clone.querySelector(".pop_up-image").addEventListener("error", () => {
-        clone.querySelector(".pop_up-image").src = './images/no-photo.png'
-    })
+
     // changing first name
     clone.querySelector("#pop_up-main-name").textContent = student.firstName + " " + student.middleName + " " + student.lastName
     clone.querySelector("#pop_up-value-name").textContent = student.firstName
@@ -337,6 +340,10 @@ async function createDetailsView(student) {
     // changing buttons and responsibility container icons and text
     await changeDetailsButtonView(student.id, clone)
 
+    // if(isHacked == true){
+    //     document.querySelector("#pop_up-place").classList.add("element-hacked")
+    // }
+
     document.querySelector("#pop_up-place").appendChild(clone)
 }
 
@@ -344,7 +351,6 @@ async function changeDetailsButtonView(student_id, detailNode) {
     // refresh of the data
     await loadJSON()
 
-    console.log(detailNode)
     let student = allStudents.filter(s => s.id == student_id)[0]
     // expell changes in view
     if(student.expelled) {
@@ -387,19 +393,25 @@ async function changeDetailsButtonView(student_id, detailNode) {
 }
 
 function setupDetailsEventListeners(student, detailNode) {
+    // image (if is missing)
+    detailNode.querySelector(".pop_up-image").addEventListener("error", () => {
+        detailNode.querySelector(".pop_up-image").src = './images/no-photo.png'
+    })
+
     // close button
-    console.log(detailNode)
     detailNode.querySelector(".pop_up-button-back").addEventListener("click", function() {
         document.querySelector("#pop_up-place").innerHTML = ""
     })
 
     // expel button
     detailNode.querySelector("#button-expel").addEventListener("click", () => {
+        console.log(student.id)
         if(student.id == "#Anna-Cybulska") {
             alert("You cannot expel me muahaha!")
         } else {
             if(!expelledStudents.includes(student.id)) {
                 expelledStudents.push(student.id)
+                reset_filter_data()
                 changeDetailsButtonView(student.id, detailNode)
             }
         }
@@ -416,6 +428,7 @@ function setupDetailsEventListeners(student, detailNode) {
             } else {
                 prefStudents = prefStudents.filter(stud_id => stud_id != student.id)
             }
+            reset_filter_data()
             changeDetailsButtonView(student.id, detailNode)
         } else {
             // TO DO
@@ -430,12 +443,19 @@ function setupDetailsEventListeners(student, detailNode) {
         if(isSlytherin || isPureBlood) {
             if(!inquStudents.includes(student.id)) {
                 inquStudents.push(student.id)
+                if(isHacked) {
+                    setTimeout(() => {
+                        inquStudents = inquStudents.filter(stud_id => stud_id != student.id)
+                        changeDetailsButtonView(student.id, detailNode)
+                    }, 3000)
+                }
             } else {
                 inquStudents = inquStudents.filter(stud_id => stud_id != student.id)
             }
         } else {
             alert("Student must be from Slytherin or have Pure blood type")
         }
+        reset_filter_data()
         changeDetailsButtonView(student.id, detailNode)
     })
 }
@@ -446,31 +466,6 @@ async function changeDetailsForPopUp(student) {
     let detailNode = document.querySelector("#pop_up-place").children[0]
     setupDetailsEventListeners(student, detailNode) // controller
 }
-
-
-
-
-
-// function changeDetailsButtonView(student) {
-//     if (student.Prefect === true) {
-//         document.querySelector("#pop_up-responsibilities-icons").children[0].classList.remove("hidden")
-//         document.querySelector("#pop_up-icon-Prefect").classList.remove("hidden")
-//     }
-//     if (student.Squad === true) {
-//         document.querySelector("#pop_up-responsibilities-icons").children[1].classList.remove("hidden")
-//         document.querySelector("#pop_up-icon-Inquisitorial_Squad").classList.remove("hidden")
-//     }
-//     if (student.Quidditch === true) {
-//         document.querySelector("#pop_up-responsibilities-icons").children[2].classList.remove("hidden")
-//         document.querySelector("#pop_up-icon-Quidditch_player").classList.remove("hidden")
-//     }
-//     if ((student.Prefect === false) && (student.Squad === false) && (student.Quidditch === false)) {
-//         document.querySelector("#no-responsibilities-text").classList.remove("hidden")
-//         document.querySelector("#pop_up-responsibilities-icons").classList.add("pop_up-no-responsibilities")
-//     }
-// }
-
-
 
 
 // Data loading functions
@@ -484,6 +479,13 @@ async function loadJSON() {
   
     // when loaded, prepare data objects
     allStudents = []
+    if(isHacked) {
+        jsonData.push({
+            fullname: "Anna Cybulska",
+            gender: "Girl",
+            house: "Gryffindor"
+        })
+    }
     prepareObjects(jsonData, jsonDataBlood)
 
     //when loaded prepare stats with numbers of students
@@ -629,19 +631,35 @@ function getProfileImage(firstName, lastName) {
     return imagePath
 }
 
-function setBloodStatus(jsonDataBlood, student){
-        if ((jsonDataBlood.half.includes(student.lastName)) & (student.house !== "Slytherin")) {
-          student.blood = "Half"
-        } else if (jsonDataBlood.pure.includes(student.lastName)) {
-          student.blood = "Pure"
-        }
-        // addittional rule so that there will be only Pure-bloods in Slytherin
-        else if (student.house == "Slytherin") {
+function setBloodStatus(jsonDataBlood, student) {
+    if ((jsonDataBlood.half.includes(student.lastName)) & (student.house !== "Slytherin")) {
+        student.blood = "Half"
+    } else if (jsonDataBlood.pure.includes(student.lastName)) {
+        student.blood = "Pure"
+    }
+    // addittional rule so that there will be only Pure-bloods in Slytherin
+    else if (student.house == "Slytherin") {
+        student.blood = "Pure"
+    }
+    else {
+        student.blood = "Mud"
+    }
+
+    if(isHacked) {
+        if(student.blood == "Pure") {
+            let choice = Math.random() * 10
+            if(choice < 0.33) {
+                student.blood = "Pure"
+            }
+            else if(choice > 0.33 && choice < 0.66) {
+                student.blood = "Half"
+            } else {
+                student.blood = "Mud"
+            }
+        } else {
             student.blood = "Pure"
         }
-        else {
-          student.blood = "Mud"
-        }
+    }
 }
 
 // Stats functions
@@ -673,27 +691,39 @@ function prepareStats() {
 
         countStatsForFilters(student, "expelled", student.expelled)
 
+        countStatsForFilters(student, "Prefect", student.Prefect)
+        countStatsForFilters(student, "Squad", student.Squad)
+        countStatsForFilters(student, "Quidditch", student.Quidditch)
+
         countStatsForFilters(student, "blood", "Pure")
         countStatsForFilters(student, "blood", "Half")
         countStatsForFilters(student, "blood", "Mud")
-        // TO DO MORE FILTERS NUMBERS
     })
 }
 
 function countStatsForFilters(student, category, filter) {
     // for active or expelled students category
-    if ((category == "expelled") && (filter === false)) {
-        statsStudents.status.Active = statsStudents.status.Active + 1
+    if (category == "expelled") {
+        statsStudents.status.Active += !filter
+        statsStudents.status.Expelled += filter
     }
-    else if ((category == "expelled") && (filter === true)) {
-        statsStudents.status.Expelled = statsStudents.status.Expelled + 1
+    // for responisibility types
+    else if (category == "Prefect") {
+        statsStudents.responsibility.Prefect += filter
     }
+    else if (category == "Squad") {
+        statsStudents.responsibility.Inquisitorial += filter
+    }
+    else if (category == "Quidditch") {
+        statsStudents.responsibility.Quidditch += filter
+    }
+   
     // for all other categories
     else if (student[category] == filter) {
         statsStudents[category][filter] = statsStudents[category][filter] + 1
     }
     else {
-        console.log("Else in countStatsForFilters function")
+        // console.log("Else in countStatsForFilters function")
     }
 }
 
@@ -707,8 +737,8 @@ function displayList() {
     // build a new list
     allStudents.forEach(displayStudents)
 
-    console.log("All students: ", allStudents)
-    console.log("Stats: ", statsStudents)
+    // console.log("All students: ", allStudents)
+    // console.log("Stats: ", statsStudents)
 }
 
 function displayStudents(student) {
@@ -786,7 +816,10 @@ function showStats() {
     document.querySelector(".filter-Expelled_students li p").textContent = "Expelled (" + statsStudents.status.Expelled + ")"
 
     // Filter category - Responsibility
-    // TO DO
+    document.querySelector(".filter-Prefect li p").textContent = "Prefect (" + statsStudents.responsibility.Prefect + ")"
+    document.querySelector(".filter-Inquisitorial_Squad li p").textContent = "Inquisitorial Squad (" + statsStudents.responsibility.Inquisitorial + ")"
+    document.querySelector(".filter-Quidditch_player li p").textContent = "Quidditch player (" + statsStudents.responsibility.Quidditch + ")"
+   
 
     // Filter category - Blood type
     document.querySelector(".filter-Pure-blood li p").textContent = "Pure (" + statsStudents.blood.Pure + ")"
@@ -860,8 +893,19 @@ function changeDisplaySorting(column, order) {
         sortBy.previousSortColumn = column
     }
     else {
-        console.log("changingDisplaySorting - 3rd option")
+        // console.log("changingDisplaySorting - 3rd option")
     }
     sort()
     displayList()
+}
+
+
+async function hackTheSystem() {
+    isHacked = true
+        
+    alert("Website is now hacked!")
+
+    // Add some visual effects
+    await loadJSON()
+    document.querySelector("#body").classList.add("element-hacked")
 }
