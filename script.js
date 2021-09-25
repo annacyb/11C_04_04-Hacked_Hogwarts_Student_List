@@ -3,7 +3,7 @@
 window.addEventListener("DOMContentLoaded", start)
 
 let allStudents = []
-let expelStudents = []
+let expelledStudents = []
 let inquStudents = []
 let prefStudents = []
 // addditional list for quidditch players
@@ -71,7 +71,6 @@ const Student = {
 
 async function start() {
     await loadJSON()
-    sort()
     displayList()
     setEventListeners()
 }
@@ -84,8 +83,7 @@ function setEventListeners() {
     setup_search_listener()
     setup_filters_listeners()
     setup_reset_button_listener()
-    // event listener for students' details is in displayList function as it changes dynamically
-    setup_pop_up_back_button_listener()
+    // event listener for students' details is in displayStudents function as it changes dynamically
 }
 
 function setup_sort_listeners() {
@@ -141,17 +139,6 @@ function setup_reset_button_listener() {
     const resetButton = document.querySelector("#reset_button")
     resetButton.addEventListener("click", reset_filter_data)
 }
-
-function setup_pop_up_back_button_listener(){
-    document.querySelector(".pop_up-button-back").addEventListener("click", function() {
-        document.querySelector("#pop_up-wrapper").classList.add("hidden")
-        // removing top gradient class of pop up
-        const gradientElement = document.querySelector("#pop_up-wrapper").children[1].children[0]
-        gradientElement.className = ''
-        gradientElement.classList.add("pop_up-gradient-top")
-    })
-}
-
 // Data modification functions 
 
 function changeSorting(column) {
@@ -200,7 +187,7 @@ async function searchStudent() {
 
     // apply filters
     filterData("house", currentFilters.house)
-    filterData("status", currentFilters.status)
+    filterData("expelled", currentFilters.status)
     filterData("responsibility", currentFilters.responsibility)
     filterData("blood", currentFilters.blood)
 
@@ -299,102 +286,192 @@ async function reset_filter_data() {
     displayList()
 }
 
-function changeDetailsForPopUp(student) {
+async function createDetailsView(student) {
+    const clone = document.querySelector("template.pop_up-on_click").content.cloneNode(true) 
 
-   // change data, change colors for pop up details
-   document.querySelector(".pop_up-image").src = student.imageFilename
-   document.querySelector(".pop_up-image").addEventListener("error", () => {
-    document.querySelector(".pop_up-image").src = './images/no-photo.png'
-})
+    // change data, change colors for pop up details
+    clone.querySelector(".pop_up-image").src = student.imageFilename
+    clone.querySelector(".pop_up-image").addEventListener("error", () => {
+        clone.querySelector(".pop_up-image").src = './images/no-photo.png'
+    })
     // changing first name
-   const popUpElement = document.querySelector("#pop_up-wrapper")
-   document.querySelector("#pop_up-main-name").textContent = student.firstName + " " + student.middleName + " " + student.lastName
-   document.querySelector("#pop_up-value-name").textContent = student.firstName
+    clone.querySelector("#pop_up-main-name").textContent = student.firstName + " " + student.middleName + " " + student.lastName
+    clone.querySelector("#pop_up-value-name").textContent = student.firstName
 
-   // changing middle name
-   document.querySelector("#pop_up-value-middlename").textContent = student.middleName
-   if(student.middleName.length == 0){
-    document.querySelector("#pop_up-value-middlename").textContent = "-"
-   }
+    // changing middle name
+    clone.querySelector("#pop_up-value-middlename").textContent = student.middleName
+    if(student.middleName.length == 0){
+        clone.querySelector("#pop_up-value-middlename").textContent = "-"
+    }
 
-   // changing nick name
-   document.querySelector("#pop_up-value-nickname").textContent = student.nickName
-   if(student.middleName.length == 0){
-    document.querySelector("#pop_up-value-nickname").textContent = "-"
-   }
+    // changing nick name
+    clone.querySelector("#pop_up-value-nickname").textContent = student.nickName
+    if(student.middleName.length == 0){
+        clone.querySelector("#pop_up-value-nickname").textContent = "-"
+    }
    
-   // changing last name, gender, blood
-   document.querySelector("#pop_up-value-surname").textContent = student.lastName
-   document.querySelector("#pop_up-value-gender").textContent = student.gender
-   document.querySelector("#pop_up-value-blood").textContent = student.blood
+    // changing last name, gender, blood
+    clone.querySelector("#pop_up-value-surname").textContent = student.lastName
+    clone.querySelector("#pop_up-value-gender").textContent = student.gender
+    clone.querySelector("#pop_up-value-blood").textContent = student.blood
 
-   // changing status
-   if (student.expelled == false) {
-    document.querySelector("#pop_up-value-status").textContent = "Active"
-    document.querySelector("#button-expel").classList.remove("pop_up-button-expel-inactive")
-    document.querySelector("#button-expel").classList.add("pop_up-button-expel-active")
-   } else {
-    document.querySelector("#pop_up-value-status").textContent = "Expelled"
-    document.querySelector("#button-expel").classList.remove("pop_up-button-expel-active")
-    document.querySelector("#button-expel").classList.add("pop_up-button-expel-inactive")
-   }
-   //
 
    // changing house name and the symbol of house
-   document.querySelector("#pop_up-value-house").textContent = student.house
-   document.querySelector("#pop_up-house-symbol").src = `./images/houses/hogwarts-house-${student.house}2.png`
+   clone.querySelector("#pop_up-value-house").textContent = student.house
+   clone.querySelector("#pop_up-house-symbol").src = `./images/houses/hogwarts-house-${student.house}2.png`
 
-   // changing gradient at the top of pop up
-   document.querySelector("#pop_up").children[0].classList.add(`pop_up-gradient-top-${student.house}`)
- 
-   // changing responsibility container
-   // resetting responsibility icons and texts - adding hidden class
-   document.querySelector("#pop_up-responsibilities-icons").children[0].classList.add("hidden")
-   document.querySelector("#pop_up-responsibilities-icons").children[1].classList.add("hidden")
-   document.querySelector("#pop_up-responsibilities-icons").children[2].classList.add("hidden")
-   document.querySelector("#pop_up-icon-Prefect").classList.add("hidden")
-   document.querySelector("#pop_up-icon-Inquisitorial_Squad").classList.add("hidden")
-   document.querySelector("#pop_up-icon-Quidditch_player").classList.add("hidden")
-   document.querySelector("#no-responsibilities-text").classList.add("hidden")
-   document.querySelector("#pop_up-responsibilities-icons").classList.remove("pop_up-no-responsibilities")
+    // changing gradient at the top of pop up
+    clone.querySelector(".pop_up").children[0].classList.add(`pop_up-gradient-top-${student.house}`)
 
-   // changing container's elements
-   if (student.Prefect === true) {
-    document.querySelector("#pop_up-responsibilities-icons").children[0].classList.remove("hidden")
-    document.querySelector("#pop_up-icon-Prefect").classList.remove("hidden")
-   }
-   if (student.Squad === true) {
-    document.querySelector("#pop_up-responsibilities-icons").children[1].classList.remove("hidden")
-    document.querySelector("#pop_up-icon-Inquisitorial_Squad").classList.remove("hidden")
-    }
-    if (student.Quidditch === true) {
-        document.querySelector("#pop_up-responsibilities-icons").children[2].classList.remove("hidden")
-        document.querySelector("#pop_up-icon-Quidditch_player").classList.remove("hidden")
-    }
+    // changing responsibility container
+    // resetting responsibility icons and texts - adding hidden class
+    clone.querySelector("#pop_up-responsibilities-icons").children[0].classList.add("hidden")
+    clone.querySelector("#pop_up-responsibilities-icons").children[1].classList.add("hidden")
+    clone.querySelector("#pop_up-responsibilities-icons").children[2].classList.add("hidden")
+    clone.querySelector("#pop_up-icon-Prefect").classList.add("hidden")
+    clone.querySelector("#pop_up-icon-Inquisitorial_Squad").classList.add("hidden")
+    clone.querySelector("#pop_up-icon-Quidditch_player").classList.add("hidden")
+    clone.querySelector("#no-responsibilities-text").classList.add("hidden")
+    clone.querySelector("#pop_up-responsibilities-icons").classList.remove("pop_up-no-responsibilities")
 
-    if ((student.Prefect === false) && (student.Squad === false) && (student.Quidditch === false)) {
-    document.querySelector("#no-responsibilities-text").classList.remove("hidden")
-    document.querySelector("#pop_up-responsibilities-icons").classList.add("pop_up-no-responsibilities")
-    }
+    // changing buttons and responsibility container icons and text
+    await changeDetailsButtonView(student.id, clone)
 
-   // TO DO - CHANGING BUTTONS
-
-   // Expel button
-   // remove event listeners
-
-   // add event listeners on buttons
-   // NEW NEW
-//    console.log("TRULU ", student.expelled)
-//    if (student.expelled == false)
-//    document.querySelector("#button-expel").addEventListener("click", () => {
-//         student.expelled == true
-//         console.log(student.expelled)
-// })
-
-   
-   // unhide pop up
-   popUpElement.classList.remove("hidden")
+    document.querySelector("#pop_up-place").appendChild(clone)
 }
+
+async function changeDetailsButtonView(student_id, detailNode) {
+    // refresh of the data
+    await loadJSON()
+
+    console.log(detailNode)
+    let student = allStudents.filter(s => s.id == student_id)[0]
+    // expell changes in view
+    if(student.expelled) {
+        detailNode.querySelector("#pop_up-value-status").textContent = "Expelled"
+        detailNode.querySelector("#button-expel").classList.remove("pop_up-button-expel-active")
+        detailNode.querySelector("#button-expel").classList.add("pop_up-button-expel-inactive")
+    } else {
+        detailNode.querySelector("#pop_up-value-status").textContent = "Active"
+        detailNode.querySelector("#button-expel").classList.remove("pop_up-button-expel-inactive")
+        detailNode.querySelector("#button-expel").classList.add("pop_up-button-expel-active")
+    }
+
+    // inquisitorial changes in view
+    if(student.Squad) {
+        detailNode.querySelector("#pop_up-responsibilities-icons").children[1].classList.remove("hidden")
+        detailNode.querySelector("#pop_up-icon-Inquisitorial_Squad").classList.remove("hidden")
+    } else {
+        detailNode.querySelector("#pop_up-responsibilities-icons").children[1].classList.add("hidden")
+        detailNode.querySelector("#pop_up-icon-Inquisitorial_Squad").classList.add("hidden")
+    }
+
+    // prefect changes in view
+        
+    if(student.Prefect) {
+        detailNode.querySelector("#pop_up-responsibilities-icons").children[0].classList.remove("hidden")
+        detailNode.querySelector("#pop_up-icon-Prefect").classList.remove("hidden")
+    } else {
+        detailNode.querySelector("#pop_up-responsibilities-icons").children[0].classList.add("hidden")
+        detailNode.querySelector("#pop_up-icon-Prefect").classList.add("hidden")
+    }
+
+    // no responsibilities view
+    detailNode.querySelector("#no-responsibilities-text").classList.add("hidden")
+    if ((student.Prefect === false) && (student.Squad === false) && (student.Quidditch === false)) {
+        detailNode.querySelector("#no-responsibilities-text").classList.remove("hidden")
+        detailNode.querySelector("#pop_up-responsibilities-icons").classList.add("pop_up-no-responsibilities")
+    }
+
+    displayList()
+}
+
+function setupDetailsEventListeners(student, detailNode) {
+    // close button
+    console.log(detailNode)
+    detailNode.querySelector(".pop_up-button-back").addEventListener("click", function() {
+        document.querySelector("#pop_up-place").innerHTML = ""
+    })
+
+    // expel button
+    detailNode.querySelector("#button-expel").addEventListener("click", () => {
+        if(student.id == "#Anna-Cybulska") {
+            alert("You cannot expel me muahaha!")
+        } else {
+            if(!expelledStudents.includes(student.id)) {
+                expelledStudents.push(student.id)
+                changeDetailsButtonView(student.id, detailNode)
+            }
+        }
+    })
+
+    // prefect button
+    detailNode.querySelector("#button-prefect").addEventListener("click", () => {
+        let houseStudents = allStudents.filter(s => {
+            return (s.house == student.house) && s.Prefect
+        })
+        if(houseStudents.length < 3) {
+            if(!prefStudents.includes(student.id)) {
+                prefStudents.push(student.id)
+            } else {
+                prefStudents = prefStudents.filter(stud_id => stud_id != student.id)
+            }
+            changeDetailsButtonView(student.id, detailNode)
+        } else {
+            // TO DO
+            alert("There can't be more than 2 prefects in the same house")
+        }
+    })
+
+    // member button
+    detailNode.querySelector("#button-member").addEventListener("click", () => {
+        let isSlytherin = student.house == "Slytherin"
+        let isPureBlood = student.blood == "Pure"
+        if(isSlytherin || isPureBlood) {
+            if(!inquStudents.includes(student.id)) {
+                inquStudents.push(student.id)
+            } else {
+                inquStudents = inquStudents.filter(stud_id => stud_id != student.id)
+            }
+        } else {
+            alert("Student must be from Slytherin or have Pure blood type")
+        }
+        changeDetailsButtonView(student.id, detailNode)
+    })
+}
+
+async function changeDetailsForPopUp(student) {
+    await createDetailsView(student) // view
+    // it's not possible to add eventListeners to template, so I'll querySelect it from parent
+    let detailNode = document.querySelector("#pop_up-place").children[0]
+    setupDetailsEventListeners(student, detailNode) // controller
+}
+
+
+
+
+
+// function changeDetailsButtonView(student) {
+//     if (student.Prefect === true) {
+//         document.querySelector("#pop_up-responsibilities-icons").children[0].classList.remove("hidden")
+//         document.querySelector("#pop_up-icon-Prefect").classList.remove("hidden")
+//     }
+//     if (student.Squad === true) {
+//         document.querySelector("#pop_up-responsibilities-icons").children[1].classList.remove("hidden")
+//         document.querySelector("#pop_up-icon-Inquisitorial_Squad").classList.remove("hidden")
+//     }
+//     if (student.Quidditch === true) {
+//         document.querySelector("#pop_up-responsibilities-icons").children[2].classList.remove("hidden")
+//         document.querySelector("#pop_up-icon-Quidditch_player").classList.remove("hidden")
+//     }
+//     if ((student.Prefect === false) && (student.Squad === false) && (student.Quidditch === false)) {
+//         document.querySelector("#no-responsibilities-text").classList.remove("hidden")
+//         document.querySelector("#pop_up-responsibilities-icons").classList.add("pop_up-no-responsibilities")
+//     }
+// }
+
+
+
 
 // Data loading functions
 
@@ -413,7 +490,7 @@ async function loadJSON() {
     resetStats()
     prepareStats()
     showStats()
-
+    sort()
 }
 
 function prepareObjects(jsonData, jsonDataBlood) {
@@ -451,39 +528,16 @@ function prepareObjects(jsonData, jsonDataBlood) {
         student.houseColor = createHouseColor(student.house)
         student.gender = makeFirstLetterUppercase(jsonObject.gender)
 
-        // add random ID (student identifier)
-        student.id = Math.round(Math.random() * 10000)
+        // add ID (student identifier)
+        student.id = `#${student.firstName}-${student.lastName}`
 
         // for setting student.blood
         setBloodStatus(jsonDataBlood, student)
 
-        // As default for all students expelled == false
-        student.expelled = Student.expelled
-
-        // expelling one of the students
-        if (student.firstName.includes("Leanne")){
-            student.expelled = true
-        }
-
-
-        // NEW
-        // TO DELETE AFTER - examples of students with different responsibilities
-        if (student.firstName.includes("Ronald")){
-            student.Quidditch = true
-        }
-
-        if (student.firstName.includes("Harry")){
-            student.Quidditch = true
-            student.Prefect = true
-        }
-
-        if (student.firstName.includes("Draco")){
-            student.Quidditch = true
-            student.Prefect = true
-            student.Squad = true
-        }
-        
-        // TO DO RESPONSIBILITY
+        // update prefect, member, expelled status
+        student.Prefect = prefStudents.includes(student.id)
+        student.Squad = inquStudents.includes(student.id)
+        student.expelled = expelledStudents.includes(student.id)
 
         allStudents.push(student)
     })
@@ -576,14 +630,14 @@ function getProfileImage(firstName, lastName) {
 }
 
 function setBloodStatus(jsonDataBlood, student){
-        if (jsonDataBlood.half.includes(student.lastName)) {
+        if ((jsonDataBlood.half.includes(student.lastName)) & (student.house !== "Slytherin")) {
           student.blood = "Half"
         } else if (jsonDataBlood.pure.includes(student.lastName)) {
           student.blood = "Pure"
         }
-        // addittional rule so that there will be no Mud-bloods in Slytherin
+        // addittional rule so that there will be only Pure-bloods in Slytherin
         else if (student.house == "Slytherin") {
-            student.blood = "Half"
+            student.blood = "Pure"
         }
         else {
           student.blood = "Mud"
@@ -675,7 +729,6 @@ function displayStudents(student) {
     clone.querySelector("div.house-circle").classList.add("circle_" + student.house)
     clone.querySelector("p.student_house_name").textContent = student.house
 
-    // NEWLY
     // Responsibility column changing - icons and texts for each student that has responsibility
 
     if (student.Prefect === true){
@@ -687,9 +740,6 @@ function displayStudents(student) {
     if (student.Quidditch === true){
         clone.querySelector(".responsibility-icons").children[0].children[2].classList.remove("hidden")       
     }
-
-
-
 
 
     // Status changing active/expelled text, icon and style in list of students
@@ -706,8 +756,6 @@ function displayStudents(student) {
         iconStatusTableElement.parentElement.parentElement.classList.add("table_element-expelled")
     }
 
-    // clone.querySelector("[data-field=nickName]").textContent = student.nickName
-    // clone.querySelector("[data-field=gender]").textContent = student.gender
 
     // append clone to list
     document.querySelector("#students_list").appendChild(clone)

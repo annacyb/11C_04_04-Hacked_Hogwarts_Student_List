@@ -8,7 +8,7 @@
     opacity: 0.3;
 }
 
-#pop_up {
+.pop_up {
     position: fixed;
     top: 10vh;
     left: 35vw;
