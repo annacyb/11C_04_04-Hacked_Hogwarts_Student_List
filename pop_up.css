@@ -8,16 +8,30 @@
     opacity: 0.3;
 }
 
-.pop_up {
-    position: fixed;
-    top: 10vh;
-    left: 35vw;
+#pop_up {
     height: 785px;
     width: 580px;
     background-color: #212F42;
     border-radius: 40px;
     filter: drop-shadow(0px 5px 15px #212F42);
 }
+
+/* classes for element with #pop_up depending on width of the screen */
+
+.pop_up-bigger_screen {
+    position: fixed;
+    top: 5vh;
+    left: 35vw;
+}
+
+.pop_up-smaller_screen {
+    position: absolute;
+    top: 50px;
+    left: 35vw;
+}
+
+
+
 
 .pop_up-gradient-top {
     height: 230px;
