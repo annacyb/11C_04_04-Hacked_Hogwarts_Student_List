@@ -196,7 +196,15 @@ async function searchStudent() {
     // apply filters
     filterData("house", currentFilters.house)
     filterData("expelled", currentFilters.status)
-    filterData("responsibility", currentFilters.responsibility)
+    if(currentFilters.responsibility.includes("Prefect")) {
+        filterData("Prefect", [true])
+    }
+    if(currentFilters.responsibility.includes("Inquisitorial")) {
+        filterData("Squad", [true])
+    }
+    if(currentFilters.responsibility.includes("Quidditch")) {
+        filterData("Quidditch", [true])
+    }
     filterData("blood", currentFilters.blood)
 
     let found = []
@@ -253,10 +261,17 @@ async function click_filter_element(filter_button, type) {
     }
     // Run filter on (ALL) selected filters
     await loadJSON()
-
     filterData("house", currentFilters.house)
     filterData("expelled", currentFilters.status)
-    filterData("responsibility", currentFilters.responsibility)
+    if(currentFilters.responsibility.includes("Prefect")) {
+        filterData("Prefect", [true])
+    }
+    if(currentFilters.responsibility.includes("Inquisitorial")) {
+        filterData("Squad", [true])
+    }
+    if(currentFilters.responsibility.includes("Quidditch")) {
+        filterData("Quidditch", [true])
+    }
     filterData("blood", currentFilters.blood)
 
     // changeFiltering(type, selectedElementsName)
@@ -406,6 +421,15 @@ async function changeDetailsButtonView(student_id, detailNode) {
         detailNode.querySelector("#pop_up-icon-Inquisitorial_Squad").classList.add("hidden")
     }
 
+    // Quidditch changes in view
+    if(student.Quidditch) {
+        detailNode.querySelector("#pop_up-responsibilities-icons").children[2].classList.remove("hidden")
+        detailNode.querySelector("#pop_up-icon-Quidditch_player").classList.remove("hidden")
+    } else {
+        detailNode.querySelector("#pop_up-responsibilities-icons").children[2].classList.add("hidden")
+        detailNode.querySelector("#pop_up-icon-Quidditch_player").classList.add("hidden")
+    }
+
 
     // no responsibilities view
     detailNode.querySelector("#no-responsibilities-text").classList.add("hidden")
@@ -460,7 +484,6 @@ function setupDetailsEventListeners(student, detailNode) {
             reset_filter_data()
             changeDetailsButtonView(student.id, detailNode)
         } else {
-            // TO DO
             alert("There can't be more than 2 prefects in the same house")
         }
     })
@@ -521,7 +544,7 @@ async function loadJSON() {
         jsonData.push({
             fullname: "Anna Cybulska",
             gender: "Girl",
-            house: "Gryffindor"
+            house: "Ravenclaw"
         })
     }
     prepareObjects(jsonData, jsonDataBlood)
@@ -574,10 +597,22 @@ function prepareObjects(jsonData, jsonDataBlood) {
         // for setting student.blood
         setBloodStatus(jsonDataBlood, student)
 
+        // for setting Quidditch players
+        setQuidditchStudents(student)
+
+        // set student called "Leanne" as expelled
+        if (student.firstName == "Leanne") {
+            student.expelled = true
+            expelledStudents.push(student.id)
+        }
+
+
         // update prefect, member, expelled status
         student.Prefect = prefStudents.includes(student.id)
         student.Squad = inquStudents.includes(student.id)
+        student.Quidditch = quidStudents.includes(student.id)
         student.expelled = expelledStudents.includes(student.id)
+
 
         allStudents.push(student)
     })
@@ -696,6 +731,42 @@ function setBloodStatus(jsonDataBlood, student) {
             }
         } else {
             student.blood = "Pure"
+        }
+    }
+}
+
+function setQuidditchStudents(student) {
+    if ((student.lastName).includes("Potter")) {
+        student.Quidditch = true
+        // so that students' ids will not duplicate
+        if (!quidStudents.includes(student.id)){
+            quidStudents.push(student.id)
+        }
+    }
+    else if ((student.firstName).includes("b") || (student.lastName).includes("b")) {
+        // without this student there will be the same number of Quidditch players in each house
+        if (student.lastName == "Crabbe") {
+        }
+        else {
+            student.Quidditch = true
+            // so that students' ids will not duplicate
+            if (!quidStudents.includes(student.id)){
+                quidStudents.push(student.id)
+            }
+        }
+    }
+    else if ((student.firstName).includes("f") || (student.lastName).includes("f")) {
+        student.Quidditch = true
+        // so that students' ids will not duplicate
+        if (!quidStudents.includes(student.id)){
+            quidStudents.push(student.id)
+        }
+    }
+    else if ((student.firstName).includes("Li") || (student.lastName).includes("Li")) {
+        student.Quidditch = true
+        // so that students' ids will not duplicate
+        if (!quidStudents.includes(student.id)){
+            quidStudents.push(student.id)
         }
     }
 }
