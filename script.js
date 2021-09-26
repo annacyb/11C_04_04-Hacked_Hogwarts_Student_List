@@ -475,15 +475,32 @@ function setupDetailsEventListeners(student, detailNode) {
         let houseStudents = allStudents.filter(s => {
             return (s.house == student.house) && s.Prefect
         })
-        if(houseStudents.length < 2) {
-            if(!prefStudents.includes(student.id)) {
+
+        if (houseStudents.length < 2) {
+            if (!prefStudents.includes(student.id)) {
                 prefStudents.push(student.id)
             } else {
                 prefStudents = prefStudents.filter(stud_id => stud_id != student.id)
             }
             reset_filter_data()
             changeDetailsButtonView(student.id, detailNode)
-        } else {
+        } else if ((houseStudents.length == 2) && (prefStudents.includes(student.id))){
+            console.log("CURRENT PREFECT- want to remove")
+            console.log("PRZED ", prefStudents)
+            student.Prefect = false
+            prefStudents.forEach(s => {
+                if (s === student.id) {
+                    const indexOfStudent = prefStudents.indexOf(s)
+                    // removing student from Prefect list
+                    prefStudents.splice(indexOfStudent, 1)
+
+                    // reset filters and students data to change prefects in view
+                    document.querySelector("#pop_up-place").innerHTML = ""
+                    reset_filter_data()
+                }
+            })
+        }
+        else {
             alert("There can't be more than 2 prefects in the same house")
         }
     })
