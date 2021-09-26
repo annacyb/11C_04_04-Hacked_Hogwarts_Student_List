@@ -292,6 +292,11 @@ async function reset_filter_data() {
 }
 
 async function createDetailsView(student) {
+    if(isHacked == true){
+        document.querySelector("#body").classList.remove("element-hacked")
+        document.querySelector("#body").classList.add("element-hacked-hue")
+    }
+
     const clone = document.querySelector("template.pop_up-on_click").content.cloneNode(true) 
 
     // change data, change colors for pop up details
@@ -352,7 +357,7 @@ async function changeDetailsButtonView(student_id, detailNode) {
     await loadJSON()
 
     let student = allStudents.filter(s => s.id == student_id)[0]
-    // expell changes in view
+    // expel button changes in view
     if(student.expelled) {
         detailNode.querySelector("#pop_up-value-status").textContent = "Expelled"
         detailNode.querySelector("#button-expel").classList.remove("pop_up-button-expel-active")
@@ -361,6 +366,35 @@ async function changeDetailsButtonView(student_id, detailNode) {
         detailNode.querySelector("#pop_up-value-status").textContent = "Active"
         detailNode.querySelector("#button-expel").classList.remove("pop_up-button-expel-inactive")
         detailNode.querySelector("#button-expel").classList.add("pop_up-button-expel-active")
+    }
+
+    // add/remove Prefect and Member buttons changing in view
+    if(student.Prefect){
+        detailNode.querySelector("#button-prefect").children[0].children[0].src = "./images/icons/icon-remove.png"
+        detailNode.querySelector("#button-text_change-Prefect").textContent = "Remove"
+    } else {
+        detailNode.querySelector("#button-prefect").children[0].children[0].src = "./images/icons/icon-add.png"
+        detailNode.querySelector("#button-text_change-Prefect").textContent = "Make"
+    }
+
+    if(student.Squad){
+        detailNode.querySelector("#button-member").children[0].children[0].src = "./images/icons/icon-remove.png"
+        detailNode.querySelector("#button-text_change-Inquisitorial_Squad").textContent = "Remove"
+    } else {
+        detailNode.querySelector("#button-member").children[0].children[0].src = "./images/icons/icon-add.png"
+        detailNode.querySelector("#button-text_change-Inquisitorial_Squad").textContent = "Make"
+    }
+
+
+
+    // prefect changes in view
+            
+    if(student.Prefect) {
+        detailNode.querySelector("#pop_up-responsibilities-icons").children[0].classList.remove("hidden")
+        detailNode.querySelector("#pop_up-icon-Prefect").classList.remove("hidden")
+    } else {
+        detailNode.querySelector("#pop_up-responsibilities-icons").children[0].classList.add("hidden")
+        detailNode.querySelector("#pop_up-icon-Prefect").classList.add("hidden")
     }
 
     // inquisitorial changes in view
@@ -372,15 +406,6 @@ async function changeDetailsButtonView(student_id, detailNode) {
         detailNode.querySelector("#pop_up-icon-Inquisitorial_Squad").classList.add("hidden")
     }
 
-    // prefect changes in view
-        
-    if(student.Prefect) {
-        detailNode.querySelector("#pop_up-responsibilities-icons").children[0].classList.remove("hidden")
-        detailNode.querySelector("#pop_up-icon-Prefect").classList.remove("hidden")
-    } else {
-        detailNode.querySelector("#pop_up-responsibilities-icons").children[0].classList.add("hidden")
-        detailNode.querySelector("#pop_up-icon-Prefect").classList.add("hidden")
-    }
 
     // no responsibilities view
     detailNode.querySelector("#no-responsibilities-text").classList.add("hidden")
@@ -400,6 +425,10 @@ function setupDetailsEventListeners(student, detailNode) {
 
     // close button
     detailNode.querySelector(".pop_up-button-back").addEventListener("click", function() {
+        if(isHacked == true){
+            document.querySelector("#body").classList.remove("element-hacked-hue")
+            document.querySelector("#body").classList.add("element-hacked")
+        }
         document.querySelector("#pop_up-place").innerHTML = ""
     })
 
@@ -422,7 +451,7 @@ function setupDetailsEventListeners(student, detailNode) {
         let houseStudents = allStudents.filter(s => {
             return (s.house == student.house) && s.Prefect
         })
-        if(houseStudents.length < 3) {
+        if(houseStudents.length < 2) {
             if(!prefStudents.includes(student.id)) {
                 prefStudents.push(student.id)
             } else {
@@ -447,7 +476,7 @@ function setupDetailsEventListeners(student, detailNode) {
                     setTimeout(() => {
                         inquStudents = inquStudents.filter(stud_id => stud_id != student.id)
                         changeDetailsButtonView(student.id, detailNode)
-                    }, 3000)
+                    }, 2000)
                 }
             } else {
                 inquStudents = inquStudents.filter(stud_id => stud_id != student.id)
@@ -467,6 +496,15 @@ async function changeDetailsForPopUp(student) {
     setupDetailsEventListeners(student, detailNode) // controller
 }
 
+async function hackTheSystem() {
+    isHacked = true
+        
+    alert("Website is now hacked!")    
+
+    // Add some visual effects
+    await loadJSON()
+    document.querySelector("#body").classList.add("element-hacked")
+}
 
 // Data loading functions
 
@@ -900,12 +938,3 @@ function changeDisplaySorting(column, order) {
 }
 
 
-async function hackTheSystem() {
-    isHacked = true
-        
-    alert("Website is now hacked!")
-
-    // Add some visual effects
-    await loadJSON()
-    document.querySelector("#body").classList.add("element-hacked")
-}
